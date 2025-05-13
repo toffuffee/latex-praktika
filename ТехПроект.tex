@@ -113,7 +113,7 @@ Node.js — это серверная платформа для выполнен
 \label{comp:image}
 \end{figure}
 
-После авторизации в веб-платформе пользователь переходит на главную рабочую страницу <<Панель управления>>, где отображаются виджеты различных сервисов.
+После авторизации в веб-платформе пользователь переходит на главную рабочую страницу <<Панель управления>>, где отображаются виджеты различных сервисов, в которые он может перейти и работать с ними напрямую.
 
 \begin{itemize}
     \item Сервис <<Почта>> — пользователь может просматривать свои письма, отвечать на них, а также отправлять новые письма. В сервисе отображаются последние 10 входящих писем из папки Входящие. Пользователь может выбрать получателя из списка контактов и отправить письмо. Также сервис интегрирован с функцией звонков, и при наличии соответствующей кнопки в письме пользователь может совершить звонок через сервис <<Разговоры>>.
@@ -148,21 +148,21 @@ Node.js — это серверная платформа для выполнен
 
 Проанализировав требования, можно выделить следующие основные сущности:
 \begin{itemize}
-  \item "<Почта">;
-  \item "<Видеоконференцсвязь">;
-  \item "<Календарь">;
-  \item "<Панель управления">;
-  \item "<Контакты">;
+  \item "<Письмо">;
+  \item "<Комната видеоконференцсвязи">;
+  \item "<Событие календаря">;
+  \item "<Виджет">;
+  \item "<Контакт">;
   \item "<Настройки">;
-  \item "<Проекты">;
-  \item "<Разговоры">;
-  \item "<Файлы">.
+  \item "<Проект">;
+  \item "<Канал">;
+  \item "<Файл">.
 \end{itemize}
 
 В состав сущностей входят следующие атрибуты:
 
 \begin{xltabular}{\textwidth}{|l|l|p{3.2cm}|X|}
-  \caption{Атрибуты сущности "<Почта">\label{mail:table}}\\ \hline
+  \caption{Атрибуты сущности "<Письмо">\label{mail:table}}\\ \hline
   Поле & Тип & Обязательное & Описание \\ \hline
   \endfirsthead
   \continuecaption{Продолжение таблицы \ref{mail:table}}\\ \hline
@@ -179,7 +179,7 @@ Node.js — это серверная платформа для выполнен
 \end{xltabular}
 
 \begin{xltabular}{\textwidth}{|l|l|p{3.2cm}|X|}
-  \caption{Атрибуты сущности "<Видеоконференцсвязь">\label{video:table}}\\ \hline
+  \caption{Атрибуты сущности "<Комната видеоконференцсвязи">\label{video:table}}\\ \hline
   Поле & Тип & Обязательное & Описание \\ \hline
   \endfirsthead
   \continuecaption{Продолжение таблицы \ref{video:table}}\\ \hline
@@ -193,7 +193,7 @@ Node.js — это серверная платформа для выполнен
 \end{xltabular}
 
 \begin{xltabular}{\textwidth}{|l|l|p{3.2cm}|X|}
-  \caption{Атрибуты сущности "<Календарь">\label{calendar:table}}\\ \hline
+  \caption{Атрибуты сущности "<Событие календаря">\label{calendar:table}}\\ \hline
   Поле & Тип & Обязательное & Описание \\ \hline
   \endfirsthead
   \continuecaption{Продолжение таблицы \ref{calendar:table}}\\ \hline
@@ -207,7 +207,7 @@ Node.js — это серверная платформа для выполнен
 \end{xltabular}
 
 \begin{xltabular}{\textwidth}{|l|l|p{3.2cm}|X|}
-  \caption{Атрибуты сущности "<Панель управления">\label{dashboard:table}}\\ \hline
+  \caption{Атрибуты сущности "<Виджет">\label{dashboard:table}}\\ \hline
   Поле & Тип & Обязательное & Описание \\ \hline
   \endfirsthead
   \continuecaption{Продолжение таблицы \ref{dashboard:table}}\\ \hline
@@ -220,7 +220,7 @@ Node.js — это серверная платформа для выполнен
 \end{xltabular}
 
 \begin{xltabular}{\textwidth}{|l|l|p{3.2cm}|X|}
-  \caption{Атрибуты сущности "<Контакты">\label{contacts:table}}\\ \hline
+  \caption{Атрибуты сущности "<Контакт">\label{contacts:table}}\\ \hline
   Поле & Тип & Обязательное & Описание \\ \hline
   \endfirsthead
   \continuecaption{Продолжение таблицы \ref{contacts:table}}\\ \hline
@@ -247,7 +247,7 @@ Node.js — это серверная платформа для выполнен
 \end{xltabular}
 
 \begin{xltabular}{\textwidth}{|l|l|p{3.2cm}|X|}
-  \caption{Атрибуты сущности "<Проекты">\label{projects:table}}\\ \hline
+  \caption{Атрибуты сущности "<Проект">\label{projects:table}}\\ \hline
   Поле & Тип & Обязательное & Описание \\ \hline
   \endfirsthead
   \continuecaption{Продолжение таблицы \ref{projects:table}}\\ \hline
@@ -261,7 +261,7 @@ Node.js — это серверная платформа для выполнен
 \end{xltabular}
 
 \begin{xltabular}{\textwidth}{|l|l|p{3.2cm}|X|}
-  \caption{Атрибуты сущности "<Разговоры">\label{talks:table}}\\ \hline
+  \caption{Атрибуты сущности "<Канал">\label{talks:table}}\\ \hline
   Поле & Тип & Обязательное & Описание \\ \hline
   \endfirsthead
   \continuecaption{Продолжение таблицы \ref{talks:table}}\\ \hline
@@ -275,7 +275,7 @@ Node.js — это серверная платформа для выполнен
 \end{xltabular}
 
 \begin{xltabular}{\textwidth}{|l|l|p{3.2cm}|X|}
-  \caption{Атрибуты сущности "<Файлы">\label{files:table}}\\ \hline
+  \caption{Атрибуты сущности "<Файл">\label{files:table}}\\ \hline
   Поле & Тип & Обязательное & Описание \\ \hline
   \endfirsthead
   \continuecaption{Продолжение таблицы \ref{files:table}}\\ \hline
