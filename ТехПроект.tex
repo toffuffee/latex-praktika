@@ -19,36 +19,9 @@
 
 Python — это высокоуровневый язык программирования общего назначения с поддержкой нескольких парадигм, включая объектно-ориентированное, процедурное и функциональное программирование. Благодаря своей простоте, читаемости и обширной экосистеме библиотек, Python широко применяется в разработке веб-приложений, автоматизации процессов, анализе данных, машинном обучении и многих других областях. В контексте разработки веб-приложений Python используется совместно с фреймворками, такими как Django и Flask, которые обеспечивают удобные средства для создания серверной логики, обработки запросов и генерации динамических веб-страниц.
 
-\subsubsection{Язык программирования JavaScript}
+\subsubsection{Язык программирования TypeScript}
 
-\paragraph{Достоинства языка JavaScript}
-
-JavaScript — это высокоуровневый интерпретируемый язык программирования, основной задачей которого является создание интерактивного поведения на веб-страницах. Он является неотъемлемой частью технологии разработки клиентской части веб-приложений и поддерживается всеми современными веб-браузерами. С помощью JavaScript можно реализовывать динамическое обновление содержимого, проверку данных на стороне клиента, обработку событий, а также взаимодействие с сервером без перезагрузки страницы (через AJAX-запросы). Современные стандарты JavaScript (начиная с ECMAScript 6) предоставляют широкий набор возможностей, включая модули, асинхронные функции, классы и работу с промисами. Для повышения совместимости и ускорения разработки часто используются библиотеки и фреймворки, такие как jQuery, React, Vue.js и другие. Они позволяют упростить доступ к элементам DOM, реализовать реактивные интерфейсы и обеспечить кроссбраузерную поддержку. JavaScript выполняется непосредственно в браузере пользователя, что позволяет создавать отзывчивые и интерактивные пользовательские интерфейсы без необходимости постоянной связи с сервером.
-
-\paragraph{Недостатки языка JavaScript}
-
-\begin{itemize}
-  \item parseInt("08") // → 0;
-  \item parseInt("0x10") // → 16;
-  \item parseInt("0x10", 10) // → 0;
-  \item null == 0 // → false;
-  \item null > 0 // → false;
-  \item null >= 0 // → true;
-  \item undefined == null // → true;
-  \item undefined === null // → false;
-  \item typeof NaN // → "number";
-  \item NaN === NaN // → false;
-  \item "5" + 3 // → "53";
-  \item "5" - 3 // → 2;
-  \item "5" * "3" // → 15;
-  \item "5" * "abc" // → NaN;
-  \item 0.1 + 0.2 === 0.3 // → false;
-  \item (0.1 + 0.2).toFixed(1) // → "0.3";
-  \item true + true // → 2;
-  \item true - false // → 1;
-  \item "1" + true // → "1true";
-  \item "1" - true // → 0.
-\end{itemize}
+TypeScript — это высокоуровневый интерпретируемый язык программирования, основной задачей которого является создание интерактивного поведения на веб-страницах, с поддержкой жёсткой типизации. Он является неотъемлемой частью технологии разработки клиентской части веб-приложений и поддерживается всеми современными веб-браузерами. С помощью TypeScript можно реализовывать динамическое обновление содержимого, проверку данных на стороне клиента, обработку событий, а также взаимодействие с сервером без перезагрузки страницы (через AJAX-запросы). Современные стандарты TypeScript предоставляют широкий набор возможностей, включая модули, асинхронные функции, классы и работу с промисами. Для повышения совместимости и ускорения разработки часто используются библиотеки и фреймворки, такие как jQuery, React, Vue.js и другие. Они позволяют упростить доступ к элементам DOM, реализовать реактивные интерфейсы и обеспечить кроссбраузерную поддержку. JavaScript выполняется непосредственно в браузере пользователя, что позволяет создавать отзывчивые и интерактивные пользовательские интерфейсы без необходимости постоянной связи с сервером.
 
 \subsubsection{React}
 React — это популярная JavaScript-библиотека для создания пользовательских интерфейсов. Она позволяет строить интерактивные веб-приложения с помощью компонентного подхода.
@@ -105,188 +78,328 @@ Node.js — это серверная платформа для выполнен
 
 \subsection{Диаграмма компонентов}
 
-Диаграмма компонентов отображает взаимодействие пользователя с сервисами. Основными элементами диаграммы являются компоненты (сервисы).
+Диаграмма компонентов в UML (Unified Modeling Language) — это структурная диаграмма, которая отображает состав и взаимодействие компонентов системы на высоком уровне абстракции. На рисунке  ~\ref{comp:image} представлена диаграмма компонентов для проектируемой системы.
 
 \begin{figure}[H]
-\center{\includegraphics[width=1\linewidth]{images/diag2}}
+\center{\includegraphics[width=0.7\linewidth]{images/diag2}}
 \caption{Диаграмма компонентов}
 \label{comp:image}
 \end{figure}
 
-После авторизации в веб-платформе пользователь переходит на главную рабочую страницу <<Панель управления>>, где отображаются виджеты различных сервисов, в которые он может перейти и работать с ними напрямую:
+\subsection{Структура базы данных}
 
-\begin{enumerate}
-    \item Сервис <<Почта>>: пользователь может просматривать свои письма, отвечать на них, а также отправлять новые письма. В сервисе отображаются последние 10 входящих писем из папки Входящие. Пользователь может выбрать получателя из списка контактов и отправить письмо. Также сервис интегрирован с функцией звонков, и при наличии соответствующей кнопки в письме пользователь может совершить звонок через сервис <<Разговоры>>.
-    
-    \item Сервис <<Файлы>>: в этом сервисе пользователь может загружать, хранить и управлять своими файлами. Он может поделиться файлами с другими пользователями, выбрав их из списка контактов. Пользователь может настраивать права доступа для каждого файла, например, на скачивание или редактирование.
+Сущности и отношение между таблицами базы данных отражены на рисунке \ref{place:image}
 
-    \item Сервис <<Контакты>>: сервис предоставляет пользователю возможность управлять списком своих контактов. Он может быстро находить пользователей для отправки писем, звонков или назначения задач. В сервисе можно просматривать информацию о контактах, включая их статус и доступные способы связи.
-
-    \item Сервис <<Разговоры>>: этот сервис позволяет пользователю совершать голосовые или видеозвонки с людьми из списка контактов. Пользователь может выбрать способ связи (текстовый чат, голосовой или видеозвонок) и начать общение. Сервис интегрируется с почтовым сервисом, позволяя удобно начинать звонки после переписки по почте.
-
-    \item Сервис <<Задачи>>: этом сервисе пользователь может назначать задачи другим пользователям, выбрав их из списка контактов. Задачи могут быть связаны с проектами или обычными делами. Пользователь может отслеживать состояние задач (выполнена, в процессе и т.д.) и получать уведомления о статусе задач.
-
-    \item Сервис <<Видеоконференцсвязь>>: в этом сервисе пользователь может создавать или присоединяться к видеоконференциям. Он может приглашать участников, проводить видеозвонки и использовать функции обмена экранами и чатом во время конференции.
-
-    \item Сервис <<Календарь>>: сервис календаря позволяет пользователю планировать свои события и задачи. Пользователь может добавлять мероприятия, настраивать напоминания и получать уведомления о предстоящих событиях. Календарь интегрируется с задачами, и пользователь может добавлять задачи в календарь для более удобного планирования.
-
-    \item Сервис <<Настройки>>: в этом сервисе пользователь может настроить параметры своей учетной записи, такие как изменение личной информации, настройка уведомлений, конфиденциальности и безопасности. Также можно выбрать тему оформления интерфейса (светлая или темная) и язык платформы.
-\end{enumerate}
-
-\subsection{Диаграмма размещения}
-
-Диаграмма размещения (рис.~\ref{place:image}) отражает физические взаимосвязи между программными и аппаратными компонентами системы.
-
-\vspace{-8mm} % чтобы убрать пустую строку, которая осталась после переноса рисунка на следующую страницу
 \begin{figure}[H]
-\center{\includegraphics[width=0.57\linewidth]{images/диаграмма2}}
-\caption{Диаграмма размещения}
+\center{\includegraphics[width=1\linewidth]{images/erdiag}}
+\caption{ER-диаграмма}
 \label{place:image}
 \end{figure}
 
-\subsection{Содержание информационных блоков. Основные сущности}
+В таблице \ref{employee:table} представлена структура таблицы employee. Таблица содержит данные о сотрудниках: уникальный идентификатор, идентификатор должности, фамилия, имя, отчество, дата рождения, пол, адрес, телефон, паспорт и код доступа.
 
-Проанализировав требования, можно выделить следующие основные сущности:
-\begin{itemize}
-  \item письмо;
-  \item комната видеоконференцсвязи;
-  \item событие календаря;
-  \item виджет;
-  \item контакт;
-  \item настройки;
-  \item задача;
-  \item канал;
-  \item файл.
-\end{itemize}
-
-В состав сущностей входят следующие атрибуты:
-
-\begin{xltabular}{\textwidth}{|l|l|p{3.2cm}|X|}
-  \caption{Атрибуты сущности "<Письмо">\label{mail:table}}\\ \hline
-  Поле & Тип & Обязательное & Описание \\ \hline
+\begin{xltabular}{\textwidth}{|l|p{5cm}|p{3cm}|X|}
+  \caption{Таблица employee\label{employee:table}} \\ \hline
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
   \endfirsthead
-  \continuecaption{Продолжение таблицы \ref{mail:table}}\\ \hline
-  Поле & Тип & Обязательное & Описание \\ \hline
-  \endhead
-  id & ObjectId & true & Уникальный идентификатор письма \\ \hline
-  sender & String & true & Отправитель \\ \hline
-  recipients & Array[String] & true & Получатели \\ \hline
-  subject & String & false & Тема письма \\ \hline
-  body & String & false & Текст письма \\ \hline
-  attachments & Array & false & Список вложений \\ \hline
-  timestamp & Date & true & Дата и время отправки \\ \hline
-  read & Boolean & true & Признак прочтения \\ \hline
+  \continuecaption{Продолжение таблицы \ref{employee:table}}
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \finishhead
+  primary key & id\_employee & Integer & true \\ \hline
+  foreign key & id\_position & Integer & true \\ \hline
+  ~ & last\_name & Text & true \\ \hline
+  ~ & first\_name & Text & true \\ \hline
+  ~ & middle\_name & Text & false \\ \hline
+  ~ & birth\_date & Date & true \\ \hline
+  ~ & gender & Text & true \\ \hline
+  ~ & address & Text & false \\ \hline
+  ~ & phone\_number & Bigint & true \\ \hline
+  ~ & passport\_number & Bigint & false \\ \hline
+  ~ & access\_code & Integer & true \\ \hline
 \end{xltabular}
 
-\begin{xltabular}{\textwidth}{|l|l|p{3.2cm}|X|}
-  \caption{Атрибуты сущности "<Комната видеоконференцсвязи">\label{video:table}}\\ \hline
-  Поле & Тип & Обязательное & Описание \\ \hline
+
+В таблице \ref{position:table} представлена структура таблицы position. Таблица содержит данные о должностях: уникальный идентификатор, название должности, отдел и уровень доступа.
+
+\begin{xltabular}{\textwidth}{|l|p{5cm}|p{3cm}|X|}
+  \caption{Таблица position\label{position:table}} \\ \hline
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
   \endfirsthead
-  \continuecaption{Продолжение таблицы \ref{video:table}}\\ \hline
-  Поле & Тип & Обязательное & Описание \\ \hline
-  \endhead
-  id & ObjectId & true & Уникальный идентификатор конференции \\ \hline
-  participants & Array[String] & true & Участники \\ \hline
-  startTime & DateTime & true & Время начала \\ \hline
-  endTime & DateTime & false & Время окончания \\ \hline
-  status & String & true & Статус (запланирована, активна, завершена) \\ \hline
+  \continuecaption{Продолжение таблицы \ref{position:table}}
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \finishhead
+  primary key & id\_position & Integer & true \\ \hline
+  ~ & name & Text & true \\ \hline
+  ~ & department & Text & true \\ \hline
+  ~ & access\_level & Integer & true \\ \hline
 \end{xltabular}
 
-\begin{xltabular}{\textwidth}{|l|l|p{3.2cm}|X|}
-  \caption{Атрибуты сущности "<Событие календаря">\label{calendar:table}}\\ \hline
-  Поле & Тип & Обязательное & Описание \\ \hline
+
+В таблице \ref{project:table} представлена структура таблицы project. Таблица содержит данные о проектах: уникальный идентификатор, идентификатор сотрудника (руководителя), название, описание, статус, дата начала и окончания.
+
+\begin{xltabular}{\textwidth}{|l|p{5cm}|p{3cm}|X|}
+  \caption{Таблица project\label{project:table}} \\ \hline
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
   \endfirsthead
-  \continuecaption{Продолжение таблицы \ref{calendar:table}}\\ \hline
-  Поле & Тип & Обязательное & Описание \\ \hline
-  \endhead
-  id & ObjectId & true & Уникальный идентификатор события \\ \hline
-  title & String & true & Название события \\ \hline
-  date & DateTime & true & Дата и время \\ \hline
-  participants & Array[String] & false & Участники \\ \hline
-  description & String & false & Описание \\ \hline
+  \continuecaption{Продолжение таблицы \ref{project:table}}
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \finishhead
+  primary key & id\_project & Integer & true \\ \hline
+  foreign key & id\_employee & Integer & true \\ \hline
+  ~ & name & Text & true \\ \hline
+  ~ & description & Text & false \\ \hline
+  ~ & status & Text & true \\ \hline
+  ~ & start\_date & Date & true \\ \hline
+  ~ & end\_date & Date & true \\ \hline
 \end{xltabular}
 
-\begin{xltabular}{\textwidth}{|l|l|p{3.2cm}|X|}
-  \caption{Атрибуты сущности "<Виджет">\label{dashboard:table}}\\ \hline
-  Поле & Тип & Обязательное & Описание \\ \hline
+
+В таблице \ref{task:table} представлена структура таблицы task. Таблица содержит данные о задачах: уникальный идентификатор, идентификатор проекта, идентификатор исполнителя, название, описание, приоритет, статус и срок исполнения.
+
+\begin{xltabular}{\textwidth}{|l|p{5cm}|p{3cm}|X|}
+  \caption{Таблица task\label{task:table}} \\ \hline
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
   \endfirsthead
-  \continuecaption{Продолжение таблицы \ref{dashboard:table}}\\ \hline
-  Поле & Тип & Обязательное & Описание \\ \hline
-  \endhead
-  id & ObjectId & true & Идентификатор виджета \\ \hline
-  name & String & true & Название виджета \\ \hline
-  type & String & true & Тип виджета (статистика, список задач и т.д.) \\ \hline
-  dataSource & String & true & Источник данных \\ \hline
+  \continuecaption{Продолжение таблицы \ref{task:table}}
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \finishhead
+  primary key & id\_task & Integer & true \\ \hline
+  foreign key & id\_project & Integer & true \\ \hline
+  foreign key & id\_employee & Integer & true \\ \hline
+  ~ & name & Text & true \\ \hline
+  ~ & description & Text & false \\ \hline
+  ~ & priority & Text & true \\ \hline
+  ~ & status & Text & true \\ \hline
+  ~ & due\_date & Date & true \\ \hline
 \end{xltabular}
 
-\begin{xltabular}{\textwidth}{|l|l|p{3.2cm}|X|}
-  \caption{Атрибуты сущности "<Контакт">\label{contacts:table}}\\ \hline
-  Поле & Тип & Обязательное & Описание \\ \hline
+
+В таблице \ref{filefolder:table} представлена структура таблицы file\_storage\_folder. Таблица содержит данные о папках файлового хранилища: уникальный идентификатор, идентификатор владельца, название и родительскую папку.
+
+\begin{xltabular}{\textwidth}{|l|p{5cm}|p{3cm}|X|}
+  \caption{Таблица file\_storage\_folder\label{filefolder:table}} \\ \hline
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
   \endfirsthead
-  \continuecaption{Продолжение таблицы \ref{contacts:table}}\\ \hline
-  Поле & Тип & Обязательное & Описание \\ \hline
-  \endhead
-  id & ObjectId & true & Уникальный идентификатор контакта \\ \hline
-  name & String & true & Имя контакта \\ \hline
-  email & String & true & Email \\ \hline
-  phone & String & false & Телефон \\ \hline
-  tags & Array[String] & false & Метки \\ \hline
+  \continuecaption{Продолжение таблицы \ref{filefolder:table}}
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \finishhead
+  primary key & id\_file\_storage\_folder & Integer & true \\ \hline
+  foreign key & id\_employee & Integer & true \\ \hline
+  ~ & name & Text & true \\ \hline
+  foreign key & parent\_folder & Integer & false \\ \hline
 \end{xltabular}
 
-\begin{xltabular}{\textwidth}{|l|l|p{3.2cm}|X|}
-  \caption{Атрибуты сущности "<Настройки">\label{settings:table}}\\ \hline
-  Поле & Тип & Обязательное & Описание \\ \hline
+
+В таблице \ref{folder:table} представлена структура таблицы folder. Таблица содержит данные о папках почты и других сервисов: уникальный идентификатор, название и тип.
+
+\begin{xltabular}{\textwidth}{|l|p{5cm}|p{3cm}|X|}
+  \caption{Таблица folder\label{folder:table}} \\ \hline
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
   \endfirsthead
-  \continuecaption{Продолжение таблицы \ref{settings:table}}\\ \hline
-  Поле & Тип & Обязательное & Описание \\ \hline
-  \endhead
-  id & ObjectId & true & Идентификатор настройки \\ \hline
-  userId & ObjectId & true & Пользователь \\ \hline
-  theme & String & false & Выбранная тема \\ \hline
-  language & String & false & Язык интерфейса \\ \hline
+  \continuecaption{Продолжение таблицы \ref{folder:table}}
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \finishhead
+  primary key & id\_folder & Integer & true \\ \hline
+  ~ & name & Text & true \\ \hline
+  ~ & type & Text & true \\ \hline
 \end{xltabular}
 
-\begin{xltabular}{\textwidth}{|l|l|p{3.2cm}|X|}
-  \caption{Атрибуты сущности "<Задача">\label{projects:table}}\\ \hline
-  Поле & Тип & Обязательное & Описание \\ \hline
+
+В таблице \ref{letter:table} представлена структура таблицы letter. Таблица содержит данные о письмах: уникальный идентификатор, идентификатор папки, идентификатор отправителя, тема, тело письма, дата отправки и статус.
+
+\begin{xltabular}{\textwidth}{|l|p{5cm}|p{3cm}|X|}
+  \caption{Таблица letter\label{letter:table}} \\ \hline
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
   \endfirsthead
-  \continuecaption{Продолжение таблицы \ref{projects:table}}\\ \hline
-  Поле & Тип & Обязательное & Описание \\ \hline
-  \endhead
-  id & ObjectId & true & Идентификатор задачи \\ \hline
-  title & String & true & Название задачи \\ \hline
-  description & String & false & Описание \\ \hline
-  members & Array[String] & true & Исполнители \\ \hline
-  status & String & true & Текущий статус \\ \hline
+  \continuecaption{Продолжение таблицы \ref{letter:table}}
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \finishhead
+  primary key & id\_letter & Integer & true \\ \hline
+  foreign key & id\_folder & Integer & true \\ \hline
+  foreign key & id\_employee & Integer & true \\ \hline
+  ~ & subject & Text & true \\ \hline
+  ~ & body & Text & false \\ \hline
+  ~ & sent\_date & Timestamp & true \\ \hline
+  ~ & status & Text & true \\ \hline
 \end{xltabular}
 
-\begin{xltabular}{\textwidth}{|l|l|p{3.2cm}|X|}
-  \caption{Атрибуты сущности "<Канал">\label{talks:table}}\\ \hline
-  Поле & Тип & Обязательное & Описание \\ \hline
+
+В таблице \ref{file:table} представлена структура таблицы file. Таблица содержит данные о файлах: уникальный идентификатор, идентификатор письма, идентификатор сотрудника (загрузившего), название, тип, размер и дату загрузки.
+
+\begin{xltabular}{\textwidth}{|l|p{5cm}|p{3cm}|X|}
+  \caption{Таблица file\label{file:table}} \\ \hline
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
   \endfirsthead
-  \continuecaption{Продолжение таблицы \ref{talks:table}}\\ \hline
-  Поле & Тип & Обязательное & Описание \\ \hline
-  \endhead
-  id & ObjectId & true & Идентификатор беседы \\ \hline
-  participants & Array[String] & true & Участники \\ \hline
-  messages & Array & true & Сообщения \\ \hline
-  lastMessage & String & false & Последнее сообщение \\ \hline
-  unreadCount & Integer & true & Количество непрочитанных \\ \hline
+  \continuecaption{Продолжение таблицы \ref{file:table}}
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \finishhead
+  primary key & id\_file & Integer & true \\ \hline
+  foreign key & id\_letter & Integer & true \\ \hline
+  foreign key & id\_employee & Integer & true \\ \hline
+  ~ & name & Text & true \\ \hline
+  ~ & type & Text & true \\ \hline
+  ~ & size & Integer & true \\ \hline
+  ~ & upload\_date & Timestamp & true \\ \hline
 \end{xltabular}
 
-\begin{xltabular}{\textwidth}{|l|l|p{3.2cm}|X|}
-  \caption{Атрибуты сущности "<Файл">\label{files:table}}\\ \hline
-  Поле & Тип & Обязательное & Описание \\ \hline
+
+В таблице \ref{event:table} представлена структура таблицы event. Таблица содержит данные о событиях: уникальный идентификатор, идентификатор сотрудника (организатора), название, описание, дата начала и окончания.
+
+\begin{xltabular}{\textwidth}{|l|p{5cm}|p{3cm}|X|}
+  \caption{Таблица event\label{event:table}} \\ \hline
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
   \endfirsthead
-  \continuecaption{Продолжение таблицы \ref{files:table}}\\ \hline
-  Поле & Тип & Обязательное & Описание \\ \hline
-  \endhead
-  id & ObjectId & true & Идентификатор файла \\ \hline
-  name & String & true & Название файла \\ \hline
-  owner & String & true & Владелец \\ \hline
-  sharedWith & Array[String] & false & Список, с кем поделились \\ \hline
-  size & Integer & true & Размер в байтах \\ \hline
-  createdAt & Date & true & Дата загрузки \\ \hline
+  \continuecaption{Продолжение таблицы \ref{event:table}}
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \finishhead
+  primary key & id\_event & Integer & true \\ \hline
+  foreign key & id\_employee & Integer & true \\ \hline
+  ~ & name & Text & true \\ \hline
+  ~ & description & Text & false \\ \hline
+  ~ & start\_date & Datetime & true \\ \hline
+  ~ & end\_date & Datetime & true \\ \hline
 \end{xltabular}
 
-Экземпляры этих сущностей реализуются в информационных блоках пользовательского интерфейса. Атрибуты сущностей отображаются в полях, свойствах и компонентах соответствующих элементов.
+
+В таблице \ref{vksroom:table} представлена структура таблицы vks\_room. Таблица содержит данные о комнатах ВКС: уникальный идентификатор, идентификатор события, идентификатор сотрудника (организатора), тема, дата начала, длительность и статус.
+
+\begin{xltabular}{\textwidth}{|l|p{5cm}|p{3cm}|X|}
+  \caption{Таблица vks\_room\label{vksroom:table}} \\ \hline
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \endfirsthead
+  \continuecaption{Продолжение таблицы \ref{vksroom:table}}
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \finishhead
+  primary key & id\_vks\_room & Integer & true \\ \hline
+  foreign key & id\_event & Integer & true \\ \hline
+  foreign key & id\_employee & Integer & true \\ \hline
+  ~ & subject & Text & true \\ \hline
+  ~ & start\_date & Datetime & true \\ \hline
+  ~ & duration & Integer & true \\ \hline
+  ~ & status & Text & true \\ \hline
+\end{xltabular}
+
+
+В таблице \ref{chat:table} представлена структура таблицы chat. Таблица содержит данные о чатах: уникальный идентификатор, идентификатор сотрудника (создателя), название, тип и дата создания.
+
+\begin{xltabular}{\textwidth}{|l|p{5cm}|p{3cm}|X|}
+  \caption{Таблица chat\label{chat:table}} \\ \hline
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \endfirsthead
+  \continuecaption{Продолжение таблицы \ref{chat:table}}
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \finishhead
+  primary key & id\_chat & Integer & true \\ \hline
+  foreign key & id\_employee & Integer & true \\ \hline
+  ~ & name & Text & true \\ \hline
+  ~ & type & Text & true \\ \hline
+  ~ & creation\_date & Timestamp & true \\ \hline
+\end{xltabular}
+
+
+В таблице \ref{message:table} представлена структура таблицы message. Таблица содержит данные о сообщениях: уникальный идентификатор, идентификатор чата, идентификатор отправителя, текст и дату отправки.
+
+\begin{xltabular}{\textwidth}{|l|p{5cm}|p{3cm}|X|}
+  \caption{Таблица message\label{message:table}} \\ \hline
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \endfirsthead
+  \continuecaption{Продолжение таблицы \ref{message:table}}
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \finishhead
+  primary key & id\_message & Integer & true \\ \hline
+  foreign key & id\_chat & Integer & true \\ \hline
+  foreign key & id\_employee & Integer & true \\ \hline
+  ~ & text & Text & true \\ \hline
+  ~ & sent\_date & Timestamp & true \\ \hline
+\end{xltabular}
+
+
+В таблице \ref{channel:table} представлена структура таблицы channel. Таблица содержит данные о каналах: уникальный идентификатор, название, описание и дату создания.
+
+\begin{xltabular}{\textwidth}{|l|p{5cm}|p{3cm}|X|}
+  \caption{Таблица channel\label{channel:table}} \\ \hline
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \endfirsthead
+  \continuecaption{Продолжение таблицы \ref{channel:table}}
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \finishhead
+  primary key & id\_channel & Integer & true \\ \hline
+  ~ & name & Text & true \\ \hline
+  ~ & description & Text & false \\ \hline
+  ~ & creation\_date & Timestamp & true \\ \hline
+\end{xltabular}
+
+
+В таблице \ref{room:table} представлена структура таблицы room. Таблица содержит данные о комнатах: уникальный идентификатор, идентификатор канала, название.
+
+\begin{xltabular}{\textwidth}{|l|p{5cm}|p{3cm}|X|}
+  \caption{Таблица room\label{room:table}} \\ \hline
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \endfirsthead
+  \continuecaption{Продолжение таблицы \ref{room:table}}
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \finishhead
+  primary key & id\_room & Integer & true \\ \hline
+  foreign key & id\_channel & Integer & true \\ \hline
+  ~ & name & Text & true \\ \hline
+\end{xltabular}
+
+
+В таблице \ref{filestoragefile:table} представлена структура таблицы filestorage\_file. Таблица содержит данные о файлах файлового хранилища: уникальный идентификатор, идентификатор сотрудника (владельца), идентификатор события, идентификатор папки файлового хранилища, название, путь, тип, размер, дату загрузки и права доступа.
+
+\begin{xltabular}{\textwidth}{|l|p{5cm}|p{3cm}|X|}
+  \caption{Таблица filestorage\_file\label{filestoragefile:table}} \\ \hline
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \endfirsthead
+  \continuecaption{Продолжение таблицы \ref{filestoragefile:table}}
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \finishhead
+  primary key & id\_filestorage\_file & Integer & true \\ \hline
+  foreign key & id\_employee & Integer & true \\ \hline
+  foreign key & id\_event & Integer & false \\ \hline
+  foreign key & id\_file\_storage\_folder & Integer & false \\ \hline
+  ~ & name & Text & true \\ \hline
+  ~ & path & Text & true \\ \hline
+  ~ & type & Text & true \\ \hline
+  ~ & size & Integer & true \\ \hline
+  ~ & upload\_date & Timestamp & true \\ \hline
+  ~ & access & Text & true \\ \hline
+\end{xltabular}
+
+
+В таблице \ref{contact:table} представлена структура таблицы contact. Таблица содержит данные о контактах: уникальный идентификатор, идентификатор сотрудника-владельца, имя, фамилия, почта, телефон, компания и должность.
+
+\begin{xltabular}{\textwidth}{|l|p{5cm}|p{3cm}|X|}
+  \caption{Таблица contact\label{contact:table}} \\ \hline
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \endfirsthead
+  \continuecaption{Продолжение таблицы \ref{contact:table}}
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \finishhead
+  primary key & id\_contact & Integer & true \\ \hline
+  foreign key & id\_employee & Integer & true \\ \hline
+  ~ & first\_name & Text & true \\ \hline
+  ~ & last\_name & Text & true \\ \hline
+  ~ & email & Text & true \\ \hline
+  ~ & phone\_number & Text & true \\ \hline
+  ~ & company & Text & false \\ \hline
+  ~ & position & Text & false \\ \hline
+\end{xltabular}
+
+
+В таблице \ref{usersettings:table} представлена структура таблицы user\_settings. Таблица содержит данные о настройках пользователя: уникальный идентификатор, идентификатор сотрудника, язык, тема, уведомления и подпись.
+
+\begin{xltabular}{\textwidth}{|l|p{5cm}|p{3cm}|X|}
+  \caption{Таблица user\_settings\label{usersettings:table}} \\ \hline
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \endfirsthead
+  \continuecaption{Продолжение таблицы \ref{usersettings:table}}
+  \centrow Тип ключа & \centrow Имя столбца & \centrow Тип данных & \centrow Обязательность \\ \hline
+  \finishhead
+  primary key & id\_user\_settings & Integer & true \\ \hline
+  foreign key & id\_employee & Integer & true \\ \hline
+  ~ & language & Text & true \\ \hline
+  ~ & theme & Text & true \\ \hline
+  ~ & notifications & Text & true \\ \hline
+  ~ & signature & Text & false \\ \hline
+\end{xltabular}
