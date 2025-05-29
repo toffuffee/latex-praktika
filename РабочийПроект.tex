@@ -1,81 +1,71 @@
 \section{Рабочий проект}
-\subsection{Классы, используемые при разработке сайта}
+\subsection{Реализация модулей веб-платформы}
 
-Можно выделить следующий список классов и их методов, использованных при разработке web-приложения (таблица \ref{class:table}). Пример таблицы с уменьшенным межстрочным интервалом.
+Веб-платформа была реализована как прогрессивная веб-платформа с модульной архитектурой. Основные функциональные модули включают:
 
-\renewcommand{\arraystretch}{0.8} % уменьшение расстояний до сетки таблицы
-\begin{xltabular}{\textwidth}{|X|p{2.5cm}|>{\setlength{\baselineskip}{0.7\baselineskip}}p{4.85cm}|>{\setlength{\baselineskip}{0.7\baselineskip}}p{4.85cm}|}
-\caption{Описание классов Bitrix, используемых в приложении\label{class:table}}\\
-\hline \centrow \setlength{\baselineskip}{0.7\baselineskip} Название класса & \centrow \setlength{\baselineskip}{0.7\baselineskip} Модуль, к которому относится класс & \centrow Описание класса & \centrow Методы \\
-\hline \centrow 1 & \centrow 2 & \centrow 3 & \centrow 4\\ \hline
-\endfirsthead
-\caption*{Продолжение таблицы \ref{class:table}}\\
-\hline \centrow 1 & \centrow 2 & \centrow 3 & \centrow 4\\ \hline
-\finishhead
-CMain & Главный модуль & CMain – главный класс страницы web-приложения. После одного из этапов по загрузке страницы в сценарии становится доступным инициализированный системой объект данного класса с именем \$APPLICATION & void ShowTitle(string property\_code = «title», bool strip\_tags = true)
-Выводит заголовок страницы
-void SetTitle(string title)
-Устанавливает заголовок страницы
+\begin{itemize}
+    \item модуль электронной почты с интеграцией JMAP;
+    \item систему управления проектами и задачами;
+    \item календарь событий с напоминаниями;
+    \item файловое хранилище с разграничением прав доступа;
+    \item модуль видеоконференцсвязи (ВКС);
+    \item систему обмена сообщениями (чат);
+    \item централизованную адресную книгу;
+    \item панель управления с настраиваемыми виджетами.
+\end{itemize}
 
-void ShowCSS(bool external = true, bool XhtmlStyle = true)
-Выводит таблицу стилей CSS страницы\\
-\hline CFile & Главный модуль & CFile – Класс для работы с файлами и изображениями & array GetFileArray (int file\_id)
-Метод возвращает массив, содержащий описание файла (путь к файлу, имя файла, размер) с идентификатором file\_id
-\end{xltabular}
-\renewcommand{\arraystretch}{1.0} % восстановление сетки
+\subsection{Архитектура и технологии}
 
-\subsection{Модульное тестирование разработанного web-сайта}
+Платформа построена по принципу микросервисной архитектуры с использованием следующих технологий:
 
-Модульный тест для класса User из модели данных представлен на рисунке \ref{unitUser:image}.
+\begin{enumerate}
+    \item Клиентская часть: TypeScript, React, Redux.
+    \item Серверная часть: Node.js, Python (Django).
+    \item База данных: PostgreSQL.
+    \item Почтовый сервер: Apache James с поддержкой JMAP.
+    \item Реальный времени: WebSocket для чатов и уведомлений.
+    \item Видеоконференции: WebRTC.
+\end{enumerate}
 
-\begin{figure}[ht]
-\begin{lstlisting}[language=Python]
-from django.test import TestCase
-from .models import *
-User = get_user_model()
+\subsection{Интеграция модулей}
 
+Все модули платформы интегрированы через единый API-шлюз, что обеспечивает:
+\begin{itemize}
+    \item согласованную работу всех компонентов;
+    \item единую систему аутентификации (JWT);
+    \item обмен данными между модулями (например, прикрепление файлов к задачам);
+    \item централизованную систему уведомлений.
+\end{itemize}
 
-class ShpoTestCases(TestCase):
+\subsection{Пользовательский интерфейс}
 
-    def setUp(self) -> None:
-        self.user = User.objects.create(username='testtestovich', password='testtestovich', first_name='Sad', last_name='')
+Интерфейс реализован с учетом требований юзабилити:
+\begin{itemize}
+    \item адаптивный дизайн для всех типов устройств;
+    \item поддержка светлой и темной темы;
+    \item единый стиль для всех модулей;
+    \item интуитивная навигация между разделами;
+    \item быстрый доступ к часто используемым функциям.
+\end{itemize}
 
-    def test_2(self):
+\subsection{Развертывание системы}
 
-        self.assertEqual(self.user.first_name, 'Sad')
-        self.assertEqual(self.user.last_name, 'Cat')
-        print((self.user))
-        print((self.user.first_name))
-        print((self.user.last_name))
-\end{lstlisting}  
-\caption{Модульный тест класса User}
-\label{unitUser:image}
-\end{figure}
+Платформа развернута в производственной среде с использованием:
+\begin{itemize}
+    \item docker-контейнеров для каждого микросервиса;
+    \item kubernetes для оркестрации;
+    \item nginx в качестве обратного прокси;
+    \item системы мониторинга Prometheus + Grafana;
+    \item ci/cd pipeline на основе GitLab.
+\end{itemize}
 
-\subsection{Системное тестирование разработанного web-сайта}
+\subsection{Безопасность}
 
-На рисунке \ref{main:image} представлена главная страница сайта «Русатом – Аддитивные технологии».
-\newpage % при необходимости можно переносить рисунок на новую страницу
-\begin{figure}[H] % H - рисунок обязательно здесь, или переносится, оставляя пустоту
-\center{\includegraphics[width=1\linewidth]{main1}}
-\center{\includegraphics[width=1\linewidth]{main2}}
-\center{\includegraphics[width=1\linewidth]{main3}}
-\caption{Главная страница сайта «Русатом – Аддитивные технологии»}
-\label{main:image}
-\end{figure}
-
-На рисунке \ref{menu:image} представлен динамический вывод заголовков, включающий в себя искомые фразы при поиске фраз.
-
-\begin{figure}[ht]
-\center{\includegraphics[width=1\linewidth]{menu}}
-\caption{Динамический вывод заголовков}
-\label{menu:image}
-\end{figure}
-
-На рисунке \ref{enter:image} представлен ввод данных для публикации новости.
-
-\begin{figure}[ht]
-\center{\includegraphics[width=1\linewidth]{enter}}
-\caption{Ввод данных для публикации очень-очень длинной, интересной и полезной новости}
-\label{enter:image}
-\end{figure}
+При разработке уделено особое внимание безопасности:
+\begin{itemize}
+    \item двухфакторная аутентификация;
+    \item шифрование данных при передаче (TLS 1.3);
+    \item ролевая модель доступа (RBAC);
+    \item защита от XSS и CSRF атак;
+    \item регулярные обновления зависимостей.
+\end{itemize}
