@@ -1,71 +1,960 @@
 \section{Рабочий проект}
-\subsection{Реализация модулей веб-платформы}
+\subsection{Спецификация компонентов и классов модулей веб-платформы}
 
-Веб-платформа была реализована как прогрессивная веб-платформа с модульной архитектурой. Основные функциональные модули включают:
+\subsubsection{Спецификация класса MailMessageController}
 
+Описание: Управляет созданием, отображением, удалением и отправкой электронных писем. Обеспечивает интеграцию с адресной книгой, управление вложениями и взаимодействие с внешним почтовым сервером через протокол JMAP. Отвечает за валидацию входящих и исходящих писем, обработку ошибок при отправке и получении, а также за маршрутизацию писем между пользователями системы.
+
+Зависимости:
 \begin{itemize}
-    \item модуль электронной почты с интеграцией JMAP;
-    \item систему управления проектами и задачами;
-    \item календарь событий с напоминаниями;
-    \item файловое хранилище с разграничением прав доступа;
-    \item модуль видеоконференцсвязи (ВКС);
-    \item систему обмена сообщениями (чат);
-    \item централизованную адресную книгу;
-    \item панель управления с настраиваемыми виджетами.
+    \item письма связаны с пользователями (отправитель и получатели) через таблицу employee;
+    \item каждое письмо может содержать вложения (файлы) через связь с таблицей file;
+    \item письма могут быть перемещены между пользовательскими папками через связь с таблицей folder;
+    \item интеграция с ContactService для автозаполнения адресов и FileStorageService для управления вложениями.
 \end{itemize}
 
-\subsection{Архитектура и технологии}
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Данные класса MailMessageController\label{mailmessagecontroller:data}} \\ \hline
+\centrow Данные & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{mailmessagecontroller:data}} 
+\centrow Данные & \centrow Описание \\ \hline
+\endhead
+Message & Модель, представляющая письмо \\ \hline
+Sender & Email отправителя (связь с таблицей employee) \\ \hline
+Recipients & Список адресатов (JSON-массив) \\ \hline
+Subject & Тема письма (максимум 200 символов) \\ \hline
+Body & Текст письма в формате HTML/plaintext \\ \hline
+Attachments & Список моделей вложений (связь с таблицей file) \\ \hline
+Folder & Модель папки, в которой находится письмо \\ \hline
+\end{xltabular}
 
-Платформа построена по принципу микросервисной архитектуры с использованием следующих технологий:
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Методы класса MailMessageController\label{mailmessagecontroller:methods}} \\ \hline
+\centrow Метод & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{mailmessagecontroller:methods}} 
+\centrow Метод & \centrow Описание \\ \hline
+\endhead
+composeMail() & Открывает редактор письма с возможностью прикрепления файлов и выбора адресатов \\ \hline
+sendMail() & Отправляет письмо через JMAP, проверяет лимиты вложений (10 МБ) \\ \hline
+getMail() & Возвращает письмо по ID с проверкой прав доступа пользователя \\ \hline
+deleteMail() & Помечает письмо как удалённое или перемещает в корзину \\ \hline
+moveToFolder() & Изменяет папку письма (например, "Архив" → "Важные") \\ \hline
+\end{xltabular}
 
+\subsubsection{Спецификация класса MailFolderService}
+
+Описание: Позволяет пользователю создавать, удалять и переименовывать папки для организации писем. Управляет системными папками ("Входящие", "Черновики"), обеспечивает синхронизацию с почтовым сервером и контроль квот на хранение.
+
+Зависимости:
+\begin{itemize}
+    \item каждая папка принадлежит одному пользователю (связь с таблицей employee);
+    \item содержит письма через связь с таблицей letter;
+    \item интегрируется с MailMessageController для операций перемещения писем.
+\end{itemize}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Данные класса MailFolderService\label{mailfolderservice:data}} \\ \hline
+\centrow Данные & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{mailfolderservice:data}} 
+\centrow Данные & \centrow Описание \\ \hline
+\endhead
+Folder & Модель, представляющая папку \\ \hline
+Name & Название папки (кириллица/латиница) \\ \hline
+User & Владелец папки (связь с employee) \\ \hline
+Type & Тип папки: "system" (входящие/отправленные) или "user" \\ \hline
+\end{xltabular}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Методы класса MailFolderService\label{mailfolderservice:methods}} \\ \hline
+\centrow Метод & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{mailfolderservice:methods}} 
+\centrow Метод & \centrow Описание \\ \hline
+\endhead
+createFolder() & Создаёт папку с валидацией имени (запрещены спецсимволы) \\ \hline
+renameFolder() & Переименовывает папку, если она не системная \\ \hline
+deleteFolder() & Удаляет папку после проверки на пустоту \\ \hline
+listFolders() & Возвращает список папок с иерархией и статистикой \\ \hline
+\end{xltabular}
+
+\subsubsection{Спецификация класса ProjectManagerController}
+
+Описание: Управляет созданием, редактированием и удалением проектов, настройкой целей, сроков и состава команды. Обеспечивает распределение задач между участниками, ведёт учёт этапов выполнения и позволяет просматривать общее состояние проекта.
+
+Зависимости:
+\begin{itemize}
+    \item проект связан с пользователями через таблицу employee\_project;
+    \item каждая задача проекта связывается через таблицу task;
+    \item используются модули CalendarService и FileStorageService для назначения сроков и прикрепления файлов;
+    \item интеграция с NotificationService для рассылки обновлений по задачам.
+\end{itemize}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Данные класса ProjectManagerController\label{projectmanager:data}} \\ \hline
+\centrow Данные & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{projectmanager:data}}
+\centrow Данные & \centrow Описание \\ \hline
+\endhead
+Project & Модель проекта с полями: название, описание, дедлайн \\ \hline
+TeamMembers & Список сотрудников, назначенных на проект \\ \hline
+Tasks & Список задач, связанных с проектом \\ \hline
+Status & Текущий статус проекта: Active / On hold / Completed \\ \hline
+Progress & Расчётный процент выполнения проекта \\ \hline
+\end{xltabular}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Методы класса ProjectManagerController\label{projectmanager:methods}} \\ \hline
+\centrow Метод & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{projectmanager:methods}}
+\centrow Метод & \centrow Описание \\ \hline
+\endhead
+createProject() & Создаёт новый проект с привязкой участников и сроков \\ \hline
+editProject() & Редактирует основные параметры проекта \\ \hline
+deleteProject() & Удаляет проект, если все задачи завершены \\ \hline
+assignTeamMember() & Назначает сотрудника на проект \\ \hline
+calculateProgress() & Вычисляет прогресс по завершённым задачам \\ \hline
+\end{xltabular}
+
+\subsubsection{Спецификация класса TaskTrackingService}
+
+Описание: Отвечает за управление задачами в рамках проекта — создание, назначение, контроль выполнения, добавление комментариев и файлов. Обеспечивает гибкое управление статусами задач и контроль сроков выполнения.
+
+Зависимости:
+\begin{itemize}
+    \item задачи связаны с проектами через поле project\_id;
+    \item каждая задача может быть связана с несколькими исполнителями;
+    \item интеграция с FileStorageService и CalendarController;
+    \item подключается к NotificationService для напоминаний и уведомлений.
+\end{itemize}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Данные класса TaskTrackingService\label{tasktracking:data}} \\ \hline
+\centrow Данные & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{tasktracking:data}}
+\centrow Данные & \centrow Описание \\ \hline
+\endhead
+Task & Модель задачи с полями: описание, приоритет, статус \\ \hline
+Assignee & Назначенный сотрудник или группа \\ \hline
+Deadline & Крайний срок выполнения \\ \hline
+Status & Этап выполнения: Todo / In Progress / Done \\ \hline
+Comments & Список комментариев по задаче \\ \hline
+\end{xltabular}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Методы класса TaskTrackingService\label{tasktracking:methods}} \\ \hline
+\centrow Метод & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{tasktracking:methods}}
+\centrow Метод & \centrow Описание \\ \hline
+\endhead
+createTask() & Создание новой задачи в рамках проекта \\ \hline
+updateStatus() & Обновление этапа выполнения задачи \\ \hline
+addComment() & Добавление текстового комментария к задаче \\ \hline
+assignEmployee() & Назначение исполнителя на задачу \\ \hline
+attachFile() & Прикрепление файла к задаче \\ \hline
+\end{xltabular}
+
+\subsubsection{Спецификация класса CalendarController}
+
+Описание: Управляет созданием, редактированием, отображением и удалением событий. Интегрируется с модулем видеоконференций для автоматического добавления ссылок на встречи. Поддерживает повторяющиеся события, приглашения участников и визуализацию в календарной сетке.
+
+Зависимости:
+\begin{itemize}
+    \item события связаны с пользователями (создатель и участники) через таблицу employee;
+    \item каждое событие может быть связано с видеовстречей через VKSController;
+    \item взаимодействие с NotificationService для отправки приглашений и напоминаний;
+    \item интеграция с ProjectManagerController для отображения проектных дедлайнов.
+\end{itemize}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Данные класса CalendarController\label{calendarcontroller:data}} \\ \hline
+\centrow Данные & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{calendarcontroller:data}}
+\centrow Данные & \centrow Описание \\ \hline
+\endhead
+Event & Модель события с полями: тема, дата, время, описание \\ \hline
+Creator & Сотрудник, создавший событие \\ \hline
+Participants & Список участников события \\ \hline
+RecurrenceRule & Правила повторения события (ежедневно/еженедельно) \\ \hline
+ConferenceLink & Ссылка на видеоконференцию (если доступно) \\ \hline
+\end{xltabular}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Методы класса CalendarController\label{calendarcontroller:methods}} \\ \hline
+\centrow Метод & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{calendarcontroller:methods}}
+\centrow Метод & \centrow Описание \\ \hline
+\endhead
+createEvent() & Создаёт событие с указанием даты, времени и участников \\ \hline
+updateEvent() & Редактирует параметры события и уведомляет участников \\ \hline
+deleteEvent() & Удаляет событие и очищает связанные встречи \\ \hline
+syncWithVKS() & Интегрирует событие с видеовстречей \\ \hline
+getEventList() & Возвращает список событий для пользователя \\ \hline
+\end{xltabular}
+
+
+
+\subsubsection{Спецификация класса ReminderService}
+
+Описание: Отвечает за отправку уведомлений пользователям о предстоящих событиях. Поддерживает как email-напоминания, так и push-уведомления. Может быть связан с другими модулями (проекты, встречи) для централизованного оповещения.
+
+Зависимости:
+\begin{itemize}
+    \item события загружаются из CalendarController;
+    \item использует NotificationService для доставки уведомлений;
+    \item доступ к пользователям через таблицу employee;
+    \item может быть переиспользован для ProjectManagerController.
+\end{itemize}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Данные класса ReminderService\label{reminderservice:data}} \\ \hline
+\centrow Данные & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{reminderservice:data}}
+\centrow Данные & \centrow Описание \\ \hline
+\endhead
+Reminder & Модель напоминания (тип, время, канал) \\ \hline
+User & Сотрудник, для которого установлено напоминание \\ \hline
+EventTime & Время начала события, к которому привязано напоминание \\ \hline
+DeliveryChannel & Канал отправки: email / push / system \\ \hline
+IsAcknowledged & Статус подтверждения уведомления пользователем \\ \hline
+\end{xltabular}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Методы класса ReminderService\label{reminderservice:methods}} \\ \hline
+\centrow Метод & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{reminderservice:methods}}
+\centrow Метод & \centrow Описание \\ \hline
+\endhead
+setReminder() & Устанавливает напоминание по дате и времени \\ \hline
+sendNotifications() & Рассылает уведомления участникам события \\ \hline
+checkUpcomingEvents() & Проверяет и активирует напоминания за 15 мин. до события \\ \hline
+acknowledgeReminder() & Отмечает напоминание как просмотренное \\ \hline
+deleteReminder() & Удаляет напоминание по ID или событию \\ \hline
+\end{xltabular}
+
+\subsubsection{Спецификация класса FileManager}
+
+Описание: Отвечает за операции с файлами и папками: загрузку, скачивание, переименование, удаление, создание структуры директорий. Контролирует права доступа к объектам, работает с превью изображений, отображает использование дискового пространства. Используется в модулях «Проекты», «Почта», «Разговоры».
+
+Зависимости:
+\begin{itemize}
+    \item каждый файл связан с пользователем (через employee) и папкой (через folder);
+    \item работает с FileStorageService для хранения и шифрования данных;
+    \item использует PermissionService для контроля доступа;
+    \item интеграция с TaskTrackingService и MailMessageController для вложений.
+\end{itemize}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Данные класса FileManager\label{filemanager:data}} \\ \hline
+\centrow Данные & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{filemanager:data}}
+\centrow Данные & \centrow Описание \\ \hline
+\endhead
+File & Модель файла (имя, размер, расширение, hash) \\ \hline
+Owner & Владелец файла (ID пользователя) \\ \hline
+Folder & Папка, в которой находится файл \\ \hline
+AccessRights & Уровень доступа: read/write/delete \\ \hline
+Preview & Ссылка на превью (если доступно) \\ \hline
+CreatedAt & Дата загрузки файла \\ \hline
+\end{xltabular}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Методы класса FileManager\label{filemanager:methods}} \\ \hline
+\centrow Метод & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{filemanager:methods}}
+\centrow Метод & \centrow Описание \\ \hline
+\endhead
+uploadFile() & Загружает файл, проверяя тип и размер \\ \hline
+downloadFile() & Скачивает файл по ID, проверяя права доступа \\ \hline
+deleteFile() & Удаляет файл с сервера и БД \\ \hline
+createFolder() & Создаёт новую директорию для хранения файлов \\ \hline
+moveFile() & Перемещает файл между папками \\ \hline
+\end{xltabular}
+
+
+
+\subsubsection{Спецификация класса FileStorageService}
+
+Описание: Обеспечивает безопасное хранение файлов, отвечает за шифрование, резервное копирование, проверку целостности и антивирусную проверку. Является низкоуровневым слоем между FileManager и физическим хранилищем.
+
+Зависимости:
+\begin{itemize}
+    \item получает запросы от FileManager для операций над файлами;
+    \item использует внешние API для шифрования (например, AES256);
+    \item подключает антивирусный движок ClamAV (или аналог);
+    \item взаимодействует с BackupService (резервные копии).
+\end{itemize}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Данные класса FileStorageService\label{filestorageservice:data}} \\ \hline
+\centrow Данные & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{filestorageservice:data}}
+\centrow Данные & \centrow Описание \\ \hline
+\endhead
+StoragePath & Путь к директории хранения файлов \\ \hline
+EncryptionKey & Ключ для шифрования содержимого файла \\ \hline
+Checksum & Контрольная сумма файла для проверки целостности \\ \hline
+ScanStatus & Статус антивирусной проверки \\ \hline
+BackupTimestamp & Время последней резервной копии \\ \hline
+\end{xltabular}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Методы класса FileStorageService\label{filestorageservice:methods}} \\ \hline
+\centrow Метод & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{filestorageservice:methods}}
+\centrow Метод & \centrow Описание \\ \hline
+\endhead
+encryptFile() & Шифрует файл перед сохранением \\ \hline
+decryptFile() & Расшифровывает файл при загрузке \\ \hline
+scanForViruses() & Проверяет файл на вирусы перед сохранением \\ \hline
+createBackup() & Сохраняет резервную копию файла в отдельный storage \\ \hline
+verifyChecksum() & Проверяет контрольную сумму при загрузке \\ \hline
+\end{xltabular}
+
+\subsubsection{Спецификация класса VKSController}
+
+Описание: Отвечает за организацию видеоконференций между пользователями платформы. Управляет созданием комнат, генерацией ссылок на подключение, настройкой доступа, записью и завершением встреч. Обеспечивает привязку к событиям календаря и проектным задачам.
+
+Зависимости:
+\begin{itemize}
+    \item встречи связаны с пользователями через таблицу employee;
+    \item каждая конференция может быть связана с событием в календаре;
+    \item взаимодействие с MediaService для передачи видеопотоков и записи;
+    \item интеграция с NotificationService для рассылки приглашений.
+\end{itemize}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Данные класса VKSController\label{vkscontroller:data}} \\ \hline
+\centrow Данные & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{vkscontroller:data}}
+\centrow Данные & \centrow Описание \\ \hline
+\endhead
+Conference & Модель конференции (ID, тема, дата, продолжительность) \\ \hline
+Host & Ведущий (создатель конференции) \\ \hline
+Participants & Приглашённые пользователи (список employee ID) \\ \hline
+AccessCode & Код доступа (если требуется) \\ \hline
+RecordingEnabled & Флаг записи встречи \\ \hline
+LinkedEvent & Событие календаря, связанное с конференцией \\ \hline
+\end{xltabular}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Методы класса VKSController\label{vkscontroller:methods}} \\ \hline
+\centrow Метод & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{vkscontroller:methods}}
+\centrow Метод & \centrow Описание \\ \hline
+\endhead
+createConference() & Создание конференции с параметрами доступа \\ \hline
+inviteParticipants() & Отправка приглашений участникам \\ \hline
+startConference() & Активация видеопотока и подключение пользователей \\ \hline
+endConference() & Завершение встречи и выгрузка записи \\ \hline
+generateJoinLink() & Генерация ссылки с токеном доступа \\ \hline
+\end{xltabular}
+
+
+
+\subsubsection{Спецификация класса MediaService}
+
+Описание: Обеспечивает обработку аудио- и видеопотоков во время конференции. Управляет началом/окончанием трансляции, записью, сжатием и сохранением медиаданных. Также отвечает за качество соединения и адаптацию потока под пропускную способность.
+
+Зависимости:
+\begin{itemize}
+    \item работает напрямую с VKSController через WebRTC API;
+    \item хранит записи в FileStorageService;
+    \item использует адаптивные алгоритмы качества (например, VP9, Opus);
+    \item взаимодействует с нагрузочным балансировщиком при высоком трафике.
+\end{itemize}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Данные класса MediaService\label{mediaservice:data}} \\ \hline
+\centrow Данные & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{mediaservice:data}}
+\centrow Данные & \centrow Описание \\ \hline
+\endhead
+Stream & Видеопоток, получаемый по WebRTC \\ \hline
+Bitrate & Текущая скорость передачи (kbps) \\ \hline
+AudioCodec & Кодек звука (например, Opus) \\ \hline
+VideoCodec & Кодек видео (например, VP9) \\ \hline
+RecordingPath & Путь для сохранения записи встречи \\ \hline
+Latency & Задержка при передаче (мс) \\ \hline
+\end{xltabular}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Методы класса MediaService\label{mediaservice:methods}} \\ \hline
+\centrow Метод & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{mediaservice:methods}}
+\centrow Метод & \centrow Описание \\ \hline
+\endhead
+setupStream() & Настройка видеопотока на стороне клиента \\ \hline
+startRecording() & Начало записи медиапотока \\ \hline
+stopRecording() & Завершение записи и сохранение файла \\ \hline
+adjustBitrate() & Автоматическая настройка качества в зависимости от сети \\ \hline
+monitorLatency() & Отслеживание задержки в реальном времени \\ \hline
+\end{xltabular}
+
+\subsubsection{Спецификация класса ChatController}
+
+Описание: Управляет созданием чатов, добавлением/удалением участников, организацией каналов, групповых и приватных бесед. Поддерживает отображение истории, закрепление сообщений, а также интеграцию с проектами и контактами.
+
+Зависимости:
+\begin{itemize}
+    \item чаты связаны с пользователями через таблицу employee;
+    \item каждое сообщение привязано к чату через message.chat\_id;
+    \item использует ContactController для отображения информации об участниках;
+    \item взаимодействует с NotificationService и MessageService.
+\end{itemize}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Данные класса ChatController\label{chatcontroller:data}} \\ \hline
+\centrow Данные & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{chatcontroller:data}}
+\centrow Данные & \centrow Описание \\ \hline
+\endhead
+Chat & Модель чата (ID, название, тип) \\ \hline
+Members & Список участников чата \\ \hline
+IsGroup & Признак группового чата \\ \hline
+PinnedMessages & Закреплённые сообщения (список ID) \\ \hline
+CreatedAt & Дата создания чата \\ \hline
+\end{xltabular}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Методы класса ChatController\label{chatcontroller:methods}} \\ \hline
+\centrow Метод & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{chatcontroller:methods}}
+\centrow Метод & \centrow Описание \\ \hline
+\endhead
+createChat() & Создание нового чата (группового или приватного) \\ \hline
+addMember() & Добавление участника в чат \\ \hline
+removeMember() & Удаление участника из чата \\ \hline
+pinMessage() & Закрепление сообщения в верхней части чата \\ \hline
+getChatHistory() & Получение истории сообщений по chat\_id \\ \hline
+\end{xltabular}
+
+
+
+\subsubsection{Спецификация класса MessageService}
+
+Описание: Обрабатывает отправку, получение и хранение сообщений. Обеспечивает доставку push-уведомлений, шифрование, поддержку вложений, реакций и статусов доставки (прочитано/доставлено).
+
+Зависимости:
+\begin{itemize}
+    \item каждое сообщение связано с пользователем (author\_id) и чатом (chat\_id);
+    \item вложения реализуются через FileManager;
+    \item интеграция с NotificationService и EncryptionModule;
+    \item статусы доставки хранятся в таблице message\_status.
+\end{itemize}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Данные класса MessageService\label{messageservice:data}} \\ \hline
+\centrow Данные & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{messageservice:data}}
+\centrow Данные & \centrow Описание \\ \hline
+\endhead
+Message & Текст сообщения, время отправки, тип (text/image/file) \\ \hline
+Author & Отправитель сообщения (employee ID) \\ \hline
+Chat & Чат, к которому относится сообщение \\ \hline
+DeliveryStatus & Статус доставки (отправлено, доставлено, прочитано) \\ \hline
+Attachments & Вложенные файлы (связь с FileManager) \\ \hline
+\end{xltabular}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Методы класса MessageService\label{messageservice:methods}} \\ \hline
+\centrow Метод & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{messageservice:methods}}
+\centrow Метод & \centrow Описание \\ \hline
+\endhead
+sendMessage() & Отправка сообщения в чат \\ \hline
+receiveMessage() & Получение входящего сообщения по WebSocket \\ \hline
+deleteMessage() & Удаление сообщения (soft delete) \\ \hline
+markAsRead() & Обновление статуса доставки до "прочитано" \\ \hline
+encryptMessage() & Шифрование тела сообщения перед отправкой \\ \hline
+\end{xltabular}
+
+\subsubsection{Спецификация класса ContactController}
+
+Описание: Управляет добавлением, редактированием, удалением и группировкой контактов. Обеспечивает интеграцию с почтой, чатами и системой уведомлений. Поддерживает метки, фильтрацию, сортировку и массовый импорт из внешних источников.
+
+Зависимости:
+\begin{itemize}
+    \item каждый контакт принадлежит пользователю (employee);
+    \item группы контактов реализованы через таблицу contact\_group;
+    \item интеграция с MailMessageController для автозаполнения email;
+    \item доступ к контактам ограничен ролями и политиками приватности.
+\end{itemize}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Данные класса ContactController\label{contactcontroller:data}} \\ \hline
+\centrow Данные & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{contactcontroller:data}}
+\centrow Данные & \centrow Описание \\ \hline
+\endhead
+Contact & Модель контакта (имя, email, телефон, компания) \\ \hline
+Group & Группа контактов, к которой относится запись \\ \hline
+Label & Метки для фильтрации (JSON-массив) \\ \hline
+IsFavorite & Признак избранного контакта \\ \hline
+CreatedAt & Дата добавления контакта \\ \hline
+\end{xltabular}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Методы класса ContactController\label{contactcontroller:methods}} \\ \hline
+\centrow Метод & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{contactcontroller:methods}}
+\centrow Метод & \centrow Описание \\ \hline
+\endhead
+addContact() & Добавление нового контакта в справочник \\ \hline
+editContact() & Редактирование данных существующего контакта \\ \hline
+deleteContact() & Удаление контакта с проверкой связей \\ \hline
+groupContacts() & Группировка по категориям \\ \hline
+getContactList() & Получение списка контактов пользователя \\ \hline
+\end{xltabular}
+
+
+
+\subsubsection{Спецификация класса ContactSyncService}
+
+Описание: Обеспечивает синхронизацию контактов между локальной базой и внешними источниками: почтовыми клиентами, CRM-системами, корпоративными LDAP-серверами. Поддерживает очистку дубликатов и регулярные автообновления.
+
+Зависимости:
+\begin{itemize}
+    \item контакты синхронизируются с внешними источниками (Google, Outlook, LDAP);
+    \item взаимодействует с ContactController и NotificationService;
+    \item использует алгоритмы сравнения строк (например, Levenshtein);
+    \item поддерживает экспорт в формате vCard и CSV.
+\end{itemize}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Данные класса ContactSyncService\label{contactsyncservice:data}} \\ \hline
+\centrow Данные & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{contactsyncservice:data}}
+\centrow Данные & \centrow Описание \\ \hline
+\endhead
+ExternalSource & Информация об источнике данных (тип, URL) \\ \hline
+LastSync & Время последней синхронизации \\ \hline
+ConflictLog & Список конфликтов при объединении записей \\ \hline
+DuplicateCount & Количество найденных дубликатов \\ \hline
+Format & Формат импорта/экспорта (CSV/vCard/LDAP) \\ \hline
+\end{xltabular}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Методы класса ContactSyncService\label{contactsyncservice:methods}} \\ \hline
+\centrow Метод & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{contactsyncservice:methods}}
+\centrow Метод & \centrow Описание \\ \hline
+\endhead
+importContacts() & Импортирует контакты из указанного источника \\ \hline
+exportContacts() & Экспортирует контакты в выбранном формате \\ \hline
+deduplicate() & Находит и объединяет дублирующиеся записи \\ \hline
+autoSync() & Планирует регулярную синхронизацию \\ \hline
+resolveConflicts() & Обрабатывает коллизии при совпадении данных \\ \hline
+\end{xltabular}
+
+\subsubsection{Спецификация класса SettingsController}
+
+Описание: Управляет пользовательскими настройками: профилем, паролем, темой оформления, уведомлениями и языком интерфейса. Является точкой входа для фронтенда при инициализации настроек в сессии пользователя. Также осуществляет базовую валидацию и сохранение изменений.
+
+Зависимости:
+\begin{itemize}
+    \item данные сохраняются в PreferencesService;
+    \item используется AuthService для смены пароля и получения информации о пользователе;
+    \item взаимодействует с NotificationService для настройки уведомлений;
+    \item интеграция с интерфейсной темой (через ThemeProvider).
+\end{itemize}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Данные класса SettingsController\label{settingscontroller:data}} \\ \hline
+\centrow Данные & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{settingscontroller:data}}
+\centrow Данные & \centrow Описание \\ \hline
+\endhead
+UserProfile & Информация о пользователе (ФИО, email, аватар) \\ \hline
+Theme & Выбранная тема (light/dark) \\ \hline
+NotificationSettings & Типы включённых уведомлений \\ \hline
+Language & Текущий язык интерфейса \\ \hline
+TwoFactorEnabled & Признак включённой двухфакторной аутентификации \\ \hline
+\end{xltabular}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Методы класса SettingsController\label{settingscontroller:methods}} \\ \hline
+\centrow Метод & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{settingscontroller:methods}}
+\centrow Метод & \centrow Описание \\ \hline
+\endhead
+updateProfile() & Обновление информации пользователя \\ \hline
+changePassword() & Изменение пароля после проверки старого \\ \hline
+setTheme() & Установка светлой или тёмной темы \\ \hline
+configureNotifications() & Настройка уведомлений (email/push) \\ \hline
+toggle2FA() & Включение или отключение двухфакторной авторизации \\ \hline
+\end{xltabular}
+
+\subsubsection{Спецификация класса PreferencesService}
+
+Описание: Обеспечивает сохранение и загрузку настроек пользователя. Хранит значения в привязанной таблице настроек в БД или в localStorage при offline-режиме. Отвечает за дефолтные параметры и восстановление настроек при сбросе.
+
+Зависимости:
+\begin{itemize}
+    \item используется SettingsController как интерфейс управления;
+    \item взаимодействует с AuthService для получения user\_id;
+    \item использует таблицу preferences (user\_id, key, value);
+    \item подключается к DefaultSettingsProvider при первом входе.
+\end{itemize}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Данные класса PreferencesService\label{preferencesservice:data}} \\ \hline
+\centrow Данные & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{preferencesservice:data}}
+\centrow Данные & \centrow Описание \\ \hline
+\endhead
+UserId & Идентификатор пользователя (внешний ключ) \\ \hline
+Key & Название параметра (например, theme) \\ \hline
+Value & Значение параметра (например, dark) \\ \hline
+UpdatedAt & Время последнего изменения \\ \hline
+IsDefault & Флаг, указывающий на дефолтность значения \\ \hline
+\end{xltabular}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Методы класса PreferencesService\label{preferencesservice:methods}} \\ \hline
+\centrow Метод & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{preferencesservice:methods}}
+\centrow Метод & \centrow Описание \\ \hline
+\endhead
+saveSetting() & Сохраняет или обновляет параметр настройки \\ \hline
+loadSettings() & Загружает все настройки пользователя по user\_id \\ \hline
+resetToDefault() & Сбрасывает настройки к значениям по умолчанию \\ \hline
+getSetting() & Получает конкретное значение по ключу \\ \hline
+mergeSettings() & Объединяет локальные и серверные настройки \\ \hline
+\end{xltabular}
+
+\subsubsection{Спецификация класса DashboardController}
+
+Описание: Отвечает за отображение пользовательской панели, управление расположением и конфигурацией виджетов. Позволяет добавлять, удалять и перетаскивать виджеты, обновлять данные в реальном времени. Также обеспечивает сохранение пользовательского расположения и адаптацию под устройства.
+
+Зависимости:
+\begin{itemize}
+    \item виджеты связаны с пользователями через таблицу dashboard\_layout;
+    \item получает данные с других сервисов: TaskTrackingService, FileManager и др.;
+    \item используется WidgetService для генерации и обновления содержимого;
+    \item взаимодействует с PreferencesService для сохранения расположения.
+\end{itemize}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Данные класса DashboardController\label{dashboardcontroller:data}} \\ \hline
+\centrow Данные & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{dashboardcontroller:data}}
+\centrow Данные & \centrow Описание \\ \hline
+\endhead
+UserLayout & Массив с позицией и конфигурацией виджетов \\ \hline
+AvailableWidgets & Список всех доступных виджетов платформы \\ \hline
+ActiveWidgets & Список активных виджетов для пользователя \\ \hline
+RefreshInterval & Интервал обновления данных на панели \\ \hline
+GridSettings & Настройки сетки (столбцы, отступы, адаптивность) \\ \hline
+\end{xltabular}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Методы класса DashboardController\label{dashboardcontroller:methods}} \\ \hline
+\centrow Метод & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{dashboardcontroller:methods}}
+\centrow Метод & \centrow Описание \\ \hline
+\endhead
+addWidget() & Добавляет выбранный виджет на панель пользователя \\ \hline
+removeWidget() & Удаляет виджет с панели и очищает его конфигурацию \\ \hline
+updateLayout() & Обновляет позиции виджетов после перемещения \\ \hline
+loadDashboard() & Загружает текущую конфигурацию панели \\ \hline
+refreshData() & Принудительное обновление содержимого всех виджетов \\ \hline
+\end{xltabular}
+
+\subsubsection{Спецификация класса WidgetService}
+
+Описание: Обрабатывает генерацию, конфигурацию и рендеринг виджетов на панели. Отвечает за запрос и кэширование данных, отображение графиков, таблиц, уведомлений и прочих блоков. Позволяет адаптировать содержимое под роль пользователя.
+
+Зависимости:
+\begin{itemize}
+    \item данные поступают от сторонних сервисов: TaskTrackingService, FileManager и т.д.;
+    \item виджеты отображаются через DashboardController;
+    \item использует PreferencesService для хранения индивидуальных настроек;
+    \item взаимодействует с ChartRenderer, TableComponent, HTMLWidget.
+\end{itemize}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Данные класса WidgetService\label{widgetservice:data}} \\ \hline
+\centrow Данные & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{widgetservice:data}}
+\centrow Данные & \centrow Описание \\ \hline
+\endhead
+Widget & Модель виджета (тип, параметры, источник данных) \\ \hline
+Config & Конфигурация отображения (цвет, размер, тип графика) \\ \hline
+DataCache & Кэш последних полученных данных \\ \hline
+Permissions & Уровни доступа к данным виджета \\ \hline
+UpdateFrequency & Частота обновления содержимого \\ \hline
+\end{xltabular}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Методы класса WidgetService\label{widgetservice:methods}} \\ \hline
+\centrow Метод & \centrow Описание \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{widgetservice:methods}}
+\centrow Метод & \centrow Описание \\ \hline
+\endhead
+createWidget() & Инициализирует новый виджет по типу \\ \hline
+updateWidget() & Обновляет конфигурацию и источник данных \\ \hline
+fetchData() & Получает актуальные данные от соответствующего сервиса \\ \hline
+renderWidget() & Отображает содержимое в нужном формате (таблица, график и т.д.) \\ \hline
+cacheData() & Сохраняет последние данные в кэше \\ \hline
+\end{xltabular}
+
+\subsection{Тестирование программной системы}
+
+\subsubsection{Модульное тестирование классов и методов программы}
+
+Модульное тестирование в рамках разработки веб-платформы проводится с целью проверки корректной работы каждого отдельного класса и метода системы. Оно позволяет локализовать и устранить ошибки ещё на ранней стадии, обеспечивая надёжность и предсказуемое поведение компонентов при различных сценариях использования.
+
+Описание процесса модульного тестирования:
+
+Модульные тесты разрабатываются для всех основных бизнес-классов, отвечающих за управление почтой, контактами, задачами, видеоконференциями, файлами, настройками и панелью управления. Для тестирования используется автоматизированный фреймворк (например, Jest для компонентов на TypeScript или pytest для Python-частей), позволяющий запускать тесты изолированно и проверять возвращаемые значения, обработку ошибок, работу с внешними сервисами и корректность изменений состояния.
+
+Цели модульного тестирования:
 \begin{enumerate}
-    \item Клиентская часть: TypeScript, React, Redux.
-    \item Серверная часть: Node.js, Python (Django).
-    \item База данных: PostgreSQL.
-    \item Почтовый сервер: Apache James с поддержкой JMAP.
-    \item Реальный времени: WebSocket для чатов и уведомлений.
-    \item Видеоконференции: WebRTC.
+    \item Изоляция — каждый тест проверяет только один метод или функциональный блок.
+    \item Автоматизация — тесты можно запускать непрерывно (CI), без вмешательства пользователя.
+    \item Покрытие — тестируются все ключевые методы, включая граничные случаи и обработку исключений.
 \end{enumerate}
 
-\subsection{Интеграция модулей}
+\newpage
+Тестирование MailMessageController:
 
-Все модули платформы интегрированы через единый API-шлюз, что обеспечивает:
+\begin{figure}[H]
+\begin{lstlisting}[language=JavaScript]
+import { MailMessageController } from '../controllers/MailMessageController';
+import { mockJMAPService } from '../mocks/jmapService';
+import { mockStorage } from '../mocks/storage';
+
+describe('MailMessageController', () => {
+  let controller;
+
+  beforeEach(() => {
+    controller = new MailMessageController(mockJMAPService, mockStorage);
+  });
+
+  it('успешно отправляет письмо с корректными данными', async () => {
+    const result = await controller.sendMail({
+      subject: 'Тестовое письмо',
+      body: 'Содержимое письма',
+      recipients: ['test@example.com'],
+      attachments: [],
+    });
+
+    expect(result.status).toBe('success');
+    expect(result.messageId).toBeDefined();
+  });
+
+  it('выдаёт ошибку при отсутствии получателя', async () => {
+    await expect(
+      controller.sendMail({
+        subject: 'Без получателя',
+        body: 'Текст',
+        recipients: [],
+        attachments: [],
+      })
+    ).rejects.toThrow('Поле "recipients" обязательно');
+  });
+});
+\end{lstlisting}
+\captionof{figure}{Тесты TaskScheduler}
+\end{figure}
+
+\newpage
+Тестирование MailMessageController:
+
+\begin{figure}[H]
+\begin{lstlisting}[language=Python]
+import pytest
+from myapp.controllers import MailMessageController
+from unittest.mock import Mock
+
+@pytest.fixture
+def mail_controller():
+    mock_jmap_service = Mock()
+    mock_storage = Mock()
+    return MailMessageController(mock_jmap_service, mock_storage)
+
+def test_send_mail_success(mail_controller):
+    mail_controller.jmap_service.send.return_value = "msg123"
+    result = mail_controller.send_mail(
+        subject="Тестовое письмо",
+        body="Содержимое письма",
+        recipients=["test@example.com"],
+        attachments=[]
+    )
+    assert result['status'] == 'success'
+    assert 'message_id' in result
+
+def test_send_mail_no_recipients(mail_controller):
+    with pytest.raises(ValueError) as exc_info:
+        mail_controller.send_mail(
+            subject="Без получателя",
+            body="Текст",
+            recipients=[],
+            attachments=[]
+        )
+    assert "recipients" in str(exc_info.value)
+\end{lstlisting}
+\captionof{figure}{Тесты MailMessageController}
+\end{figure}
+
+
+\newpage
+Тестирование ContactManager:
+
+\begin{figure}[H]
+\begin{lstlisting}[language=JavaScript]
+import { ContactManager } from '../controllers/ContactManager';
+
+describe('ContactManager', () => {
+  let manager;
+
+  beforeEach(() => {
+    manager = new ContactManager();
+  });
+
+  it('добавляет новый контакт', () => {
+    const contact = { id: '1', name: 'Иван' };
+    manager.addContact(contact);
+    expect(manager.getContactById('1')).toEqual(contact);
+  });
+
+  it('удаляет контакт', () => {
+    manager.addContact({ id: '2', name: 'Мария' });
+    manager.removeContact('2');
+    expect(manager.getContactById('2')).toBeUndefined();
+  });
+});
+\end{lstlisting}
+\captionof{figure}{Тесты ContactManager}
+\end{figure}
+
+\newpage
+Тестирование TaskScheduler:
+
+\begin{figure}[H]
+\begin{lstlisting}[language=JavaScript]
+import { TaskScheduler } from '../controllers/TaskScheduler';
+
+describe('TaskScheduler', () => {
+  let scheduler;
+
+  beforeEach(() => {
+    scheduler = new TaskScheduler();
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it('запускает задачу по расписанию', () => {
+    const mockTask = jest.fn();
+    scheduler.schedule('task1', mockTask, 1000);
+    jest.advanceTimersByTime(1000);
+    expect(mockTask).toHaveBeenCalled();
+  });
+
+  it('отменяет задачу', () => {
+    const mockTask = jest.fn();
+    scheduler.schedule('task2', mockTask, 1000);
+    scheduler.cancel('task2');
+    jest.advanceTimersByTime(1000);
+    expect(mockTask).not.toHaveBeenCalled();
+  });
+});
+\end{lstlisting}
+\captionof{figure}{Тесты TaskScheduler}
+\end{figure}
+
+\newpage
+Тестирование VideoConferenceManager:
+
+\begin{figure}[H]
+\begin{lstlisting}[language=Python]
+import pytest
+from myapp.controllers import VideoConferenceManager
+
+@pytest.fixture
+def vc_manager():
+    return VideoConferenceManager()
+
+def test_start_meeting(vc_manager):
+    meeting_id = vc_manager.start_meeting(['user1', 'user2'])
+    assert isinstance(meeting_id, str)
+    assert vc_manager.is_active(meeting_id)
+
+def test_end_meeting(vc_manager):
+    meeting_id = vc_manager.start_meeting(['user1'])
+    vc_manager.end_meeting(meeting_id)
+    assert not vc_manager.is_active(meeting_id)
+\end{lstlisting}
+\captionof{figure}{Тесты VideoConferenceManager}
+\end{figure}
+
+\newpage
+Тестирование FileStorageController:
+
+\begin{figure}[H]
+\begin{lstlisting}[language=Python]
+import pytest
+from myapp.controllers import FileStorageController
+
+@pytest.fixture
+def storage_controller():
+    return FileStorageController()
+
+def test_save_file(storage_controller):
+    file_id = storage_controller.save_file(b'content', 'file.txt')
+    assert file_id is not None
+
+def test_delete_file(storage_controller):
+    file_id = storage_controller.save_file(b'content', 'file.txt')
+    storage_controller.delete_file(file_id)
+    assert not storage_controller.exists(file_id)
+\end{lstlisting}
+\captionof{figure}{Тесты FileStorageController}
+\end{figure}
+
+Результаты тестирования
+
+Все представленные тесты успешно проверяют поведение ключевых компонентов приложения. Использование Jest и Pytest обеспечивает:
 \begin{itemize}
-    \item согласованную работу всех компонентов;
-    \item единую систему аутентификации (JWT);
-    \item обмен данными между модулями (например, прикрепление файлов к задачам);
-    \item централизованную систему уведомлений.
-\end{itemize}
-
-\subsection{Пользовательский интерфейс}
-
-Интерфейс реализован с учетом требований юзабилити:
-\begin{itemize}
-    \item адаптивный дизайн для всех типов устройств;
-    \item поддержка светлой и темной темы;
-    \item единый стиль для всех модулей;
-    \item интуитивная навигация между разделами;
-    \item быстрый доступ к часто используемым функциям.
-\end{itemize}
-
-\subsection{Развертывание системы}
-
-Платформа развернута в производственной среде с использованием:
-\begin{itemize}
-    \item docker-контейнеров для каждого микросервиса;
-    \item kubernetes для оркестрации;
-    \item nginx в качестве обратного прокси;
-    \item системы мониторинга Prometheus + Grafana;
-    \item ci/cd pipeline на основе GitLab.
-\end{itemize}
-
-\subsection{Безопасность}
-
-При разработке уделено особое внимание безопасности:
-\begin{itemize}
-    \item двухфакторная аутентификация;
-    \item шифрование данных при передаче (TLS 1.3);
-    \item ролевая модель доступа (RBAC);
-    \item защита от XSS и CSRF атак;
-    \item регулярные обновления зависимостей.
+  \item контроль корректности бизнес-логики;
+  \item отлавливание ошибок при неверных входных данных;
+  \item поддержку модульного и интеграционного тестирования.
 \end{itemize}
