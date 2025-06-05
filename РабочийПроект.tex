@@ -3,9 +3,9 @@
 
 \subsubsection{Спецификация класса MailMessageController}
 
-Описание: Управляет созданием, отображением, удалением и отправкой электронных писем. Обеспечивает интеграцию с адресной книгой, управление вложениями и взаимодействие с внешним почтовым сервером через протокол JMAP. Отвечает за валидацию входящих и исходящих писем, обработку ошибок при отправке и получении, а также за маршрутизацию писем между пользователями системы.
+Класс отвечает за создание, отображение, удаление и отправку электронных писем. Обеспечивает интеграцию с адресной книгой, управление вложениями и взаимодействие с внешним почтовым сервером через протокол JMAP. Отвечает за валидацию входящих и исходящих писем, обработку ошибок при отправке и получении, а также за маршрутизацию писем между пользователями системы.
 
-Зависимости:
+Класс взаимодействует со следующими классами:
 \begin{itemize}
     \item письма связаны с пользователями (отправитель и получатели) через таблицу employee;
     \item каждое письмо может содержать вложения (файлы) через связь с таблицей file;
@@ -13,12 +13,16 @@
     \item интеграция с ContactService для автозаполнения адресов и FileStorageService для управления вложениями.
 \end{itemize}
 
+Описание полей класса представлено в таблице \ref{mailmessagecontroller:data}.
+
+Описание методов класса представлено в таблице \ref{mailmessagecontroller:methods}.
+
 \begin{xltabular}{\textwidth}{|p{6cm}|X|}
-\caption{Данные класса MailMessageController\label{mailmessagecontroller:data}} \\ \hline
-\centrow Данные & \centrow Описание \\ \hline
+\caption{Поля класса MailMessageController\label{mailmessagecontroller:data}} \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endfirsthead
 \continuecaption{Продолжение таблицы \ref{mailmessagecontroller:data}} 
-\centrow Данные & \centrow Описание \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endhead
 Message & Модель, представляющая письмо \\ \hline
 Sender & Email отправителя (связь с таблицей employee) \\ \hline
@@ -45,21 +49,25 @@ moveToFolder() & Изменяет папку письма (например, "А
 
 \subsubsection{Спецификация класса MailFolderService}
 
-Описание: Позволяет пользователю создавать, удалять и переименовывать папки для организации писем. Управляет системными папками ("Входящие", "Черновики"), обеспечивает синхронизацию с почтовым сервером и контроль квот на хранение.
+Класс позволяет пользователю создавать, удалять и переименовывать папки для организации писем. Управляет системными папками ("Входящие", "Черновики"), обеспечивает синхронизацию с почтовым сервером и контроль квот на хранение.
 
-Зависимости:
+Класс взаимодействует со следующими классами:
 \begin{itemize}
     \item каждая папка принадлежит одному пользователю (связь с таблицей employee);
     \item содержит письма через связь с таблицей letter;
     \item интегрируется с MailMessageController для операций перемещения писем.
 \end{itemize}
 
+Описание полей класса представлено в таблице \ref{mailfolderservice:data}.
+
+Описание методов класса представлено в таблице \ref{mailfolderservice:methods}.
+
 \begin{xltabular}{\textwidth}{|p{6cm}|X|}
-\caption{Данные класса MailFolderService\label{mailfolderservice:data}} \\ \hline
-\centrow Данные & \centrow Описание \\ \hline
+\caption{Поля класса MailFolderService\label{mailfolderservice:data}} \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endfirsthead
 \continuecaption{Продолжение таблицы \ref{mailfolderservice:data}} 
-\centrow Данные & \centrow Описание \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endhead
 Folder & Модель, представляющая папку \\ \hline
 Name & Название папки (кириллица/латиница) \\ \hline
@@ -82,9 +90,9 @@ listFolders() & Возвращает список папок с иерархие
 
 \subsubsection{Спецификация класса ProjectManagerController}
 
-Описание: Управляет созданием, редактированием и удалением проектов, настройкой целей, сроков и состава команды. Обеспечивает распределение задач между участниками, ведёт учёт этапов выполнения и позволяет просматривать общее состояние проекта.
+Класс управляет созданием, редактированием и удалением проектов, настройкой целей, сроков и состава команды. Обеспечивает распределение задач между участниками, ведёт учёт этапов выполнения и позволяет просматривать общее состояние проекта.
 
-Зависимости:
+Класс взаимодействует со следующими классами:
 \begin{itemize}
     \item проект связан с пользователями через таблицу employee\_project;
     \item каждая задача проекта связывается через таблицу task;
@@ -92,12 +100,16 @@ listFolders() & Возвращает список папок с иерархие
     \item интеграция с NotificationService для рассылки обновлений по задачам.
 \end{itemize}
 
+Описание полей класса представлено в таблице \ref{projectmanager:data}.
+
+Описание методов класса представлено в таблице \ref{projectmanager:methods}.
+
 \begin{xltabular}{\textwidth}{|p{6cm}|X|}
-\caption{Данные класса ProjectManagerController\label{projectmanager:data}} \\ \hline
-\centrow Данные & \centrow Описание \\ \hline
+\caption{Поля класса ProjectManagerController\label{projectmanager:data}} \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endfirsthead
 \continuecaption{Продолжение таблицы \ref{projectmanager:data}}
-\centrow Данные & \centrow Описание \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endhead
 Project & Модель проекта с полями: название, описание, дедлайн \\ \hline
 TeamMembers & Список сотрудников, назначенных на проект \\ \hline
@@ -122,9 +134,9 @@ calculateProgress() & Вычисляет прогресс по завершён�
 
 \subsubsection{Спецификация класса TaskTrackingService}
 
-Описание: Отвечает за управление задачами в рамках проекта — создание, назначение, контроль выполнения, добавление комментариев и файлов. Обеспечивает гибкое управление статусами задач и контроль сроков выполнения.
+Класс отвечает за управление задачами в рамках проекта — создание, назначение, контроль выполнения, добавление комментариев и файлов. Обеспечивает гибкое управление статусами задач и контроль сроков выполнения.
 
-Зависимости:
+Класс взаимодействует со следующими классами:
 \begin{itemize}
     \item задачи связаны с проектами через поле project\_id;
     \item каждая задача может быть связана с несколькими исполнителями;
@@ -132,12 +144,16 @@ calculateProgress() & Вычисляет прогресс по завершён�
     \item подключается к NotificationService для напоминаний и уведомлений.
 \end{itemize}
 
+Описание полей класса представлено в таблице \ref{tasktracking:data}.
+
+Описание методов класса представлено в таблице \ref{tasktracking:methods}.
+
 \begin{xltabular}{\textwidth}{|p{6cm}|X|}
-\caption{Данные класса TaskTrackingService\label{tasktracking:data}} \\ \hline
-\centrow Данные & \centrow Описание \\ \hline
+\caption{Поля класса TaskTrackingService\label{tasktracking:data}} \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endfirsthead
 \continuecaption{Продолжение таблицы \ref{tasktracking:data}}
-\centrow Данные & \centrow Описание \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endhead
 Task & Модель задачи с полями: описание, приоритет, статус \\ \hline
 Assignee & Назначенный сотрудник или группа \\ \hline
@@ -162,9 +178,9 @@ attachFile() & Прикрепление файла к задаче \\ \hline
 
 \subsubsection{Спецификация класса CalendarController}
 
-Описание: Управляет созданием, редактированием, отображением и удалением событий. Интегрируется с модулем видеоконференций для автоматического добавления ссылок на встречи. Поддерживает повторяющиеся события, приглашения участников и визуализацию в календарной сетке.
+Класс управляет созданием, редактированием, отображением и удалением событий. Интегрируется с модулем видеоконференций для автоматического добавления ссылок на встречи. Поддерживает повторяющиеся события, приглашения участников и визуализацию в календарной сетке.
 
-Зависимости:
+Класс взаимодействует со следующими классами:
 \begin{itemize}
     \item события связаны с пользователями (создатель и участники) через таблицу employee;
     \item каждое событие может быть связано с видеовстречей через VKSController;
@@ -172,12 +188,16 @@ attachFile() & Прикрепление файла к задаче \\ \hline
     \item интеграция с ProjectManagerController для отображения проектных дедлайнов.
 \end{itemize}
 
+Описание полей класса представлено в таблице \ref{calendarcontroller:data}.
+
+Описание методов класса представлено в таблице \ref{calendarcontroller:methods}.
+
 \begin{xltabular}{\textwidth}{|p{6cm}|X|}
-\caption{Данные класса CalendarController\label{calendarcontroller:data}} \\ \hline
-\centrow Данные & \centrow Описание \\ \hline
+\caption{Поля класса CalendarController\label{calendarcontroller:data}} \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endfirsthead
 \continuecaption{Продолжение таблицы \ref{calendarcontroller:data}}
-\centrow Данные & \centrow Описание \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endhead
 Event & Модель события с полями: тема, дата, время, описание \\ \hline
 Creator & Сотрудник, создавший событие \\ \hline
@@ -200,13 +220,11 @@ syncWithVKS() & Интегрирует событие с видеовстреч�
 getEventList() & Возвращает список событий для пользователя \\ \hline
 \end{xltabular}
 
-
-
 \subsubsection{Спецификация класса ReminderService}
 
-Описание: Отвечает за отправку уведомлений пользователям о предстоящих событиях. Поддерживает как email-напоминания, так и push-уведомления. Может быть связан с другими модулями (проекты, встречи) для централизованного оповещения.
+Класс отвечает за отправку уведомлений пользователям о предстоящих событиях. Поддерживает как email-напоминания, так и push-уведомления. Может быть связан с другими модулями (проекты, встречи) для централизованного оповещения.
 
-Зависимости:
+Класс взаимодействует со следующими классами:
 \begin{itemize}
     \item события загружаются из CalendarController;
     \item использует NotificationService для доставки уведомлений;
@@ -214,12 +232,16 @@ getEventList() & Возвращает список событий для пол�
     \item может быть переиспользован для ProjectManagerController.
 \end{itemize}
 
+Описание полей класса представлено в таблице \ref{reminderservice:data}.
+
+Описание методов класса представлено в таблице \ref{reminderservice:methods}.
+
 \begin{xltabular}{\textwidth}{|p{6cm}|X|}
-\caption{Данные класса ReminderService\label{reminderservice:data}} \\ \hline
-\centrow Данные & \centrow Описание \\ \hline
+\caption{Поля класса ReminderService\label{reminderservice:data}} \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endfirsthead
 \continuecaption{Продолжение таблицы \ref{reminderservice:data}}
-\centrow Данные & \centrow Описание \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endhead
 Reminder & Модель напоминания (тип, время, канал) \\ \hline
 User & Сотрудник, для которого установлено напоминание \\ \hline
@@ -242,11 +264,12 @@ acknowledgeReminder() & Отмечает напоминание как прос�
 deleteReminder() & Удаляет напоминание по ID или событию \\ \hline
 \end{xltabular}
 
+
 \subsubsection{Спецификация класса FileManager}
 
-Описание: Отвечает за операции с файлами и папками: загрузку, скачивание, переименование, удаление, создание структуры директорий. Контролирует права доступа к объектам, работает с превью изображений, отображает использование дискового пространства. Используется в модулях «Проекты», «Почта», «Разговоры».
+Класс отвечает за операции с файлами и папками: загрузку, скачивание, переименование, удаление, создание структуры директорий. Контролирует права доступа к объектам, работает с превью изображений, отображает использование дискового пространства. Используется в модулях «Проекты», «Почта», «Разговоры».
 
-Зависимости:
+Класс взаимодействует со следующими классами:
 \begin{itemize}
     \item каждый файл связан с пользователем (через employee) и папкой (через folder);
     \item работает с FileStorageService для хранения и шифрования данных;
@@ -254,12 +277,16 @@ deleteReminder() & Удаляет напоминание по ID или собы
     \item интеграция с TaskTrackingService и MailMessageController для вложений.
 \end{itemize}
 
+Описание полей класса представлено в таблице \ref{filemanager:data}.
+
+Описание методов класса представлено в таблице \ref{filemanager:methods}.
+
 \begin{xltabular}{\textwidth}{|p{6cm}|X|}
-\caption{Данные класса FileManager\label{filemanager:data}} \\ \hline
-\centrow Данные & \centrow Описание \\ \hline
+\caption{Поля класса FileManager\label{filemanager:data}} \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endfirsthead
 \continuecaption{Продолжение таблицы \ref{filemanager:data}}
-\centrow Данные & \centrow Описание \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endhead
 File & Модель файла (имя, размер, расширение, hash) \\ \hline
 Owner & Владелец файла (ID пользователя) \\ \hline
@@ -283,13 +310,11 @@ createFolder() & Создаёт новую директорию для хран�
 moveFile() & Перемещает файл между папками \\ \hline
 \end{xltabular}
 
-
-
 \subsubsection{Спецификация класса FileStorageService}
 
-Описание: Обеспечивает безопасное хранение файлов, отвечает за шифрование, резервное копирование, проверку целостности и антивирусную проверку. Является низкоуровневым слоем между FileManager и физическим хранилищем.
+Класс обеспечивает безопасное хранение файлов, отвечает за шифрование, резервное копирование, проверку целостности и антивирусную проверку. Является низкоуровневым слоем между FileManager и физическим хранилищем.
 
-Зависимости:
+Класс взаимодействует со следующими классами:
 \begin{itemize}
     \item получает запросы от FileManager для операций над файлами;
     \item использует внешние API для шифрования (например, AES256);
@@ -297,12 +322,16 @@ moveFile() & Перемещает файл между папками \\ \hline
     \item взаимодействует с BackupService (резервные копии).
 \end{itemize}
 
+Описание полей класса представлено в таблице \ref{filestorageservice:data}.
+
+Описание методов класса представлено в таблице \ref{filestorageservice:methods}.
+
 \begin{xltabular}{\textwidth}{|p{6cm}|X|}
-\caption{Данные класса FileStorageService\label{filestorageservice:data}} \\ \hline
-\centrow Данные & \centrow Описание \\ \hline
+\caption{Поля класса FileStorageService\label{filestorageservice:data}} \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endfirsthead
 \continuecaption{Продолжение таблицы \ref{filestorageservice:data}}
-\centrow Данные & \centrow Описание \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endhead
 StoragePath & Путь к директории хранения файлов \\ \hline
 EncryptionKey & Ключ для шифрования содержимого файла \\ \hline
@@ -327,9 +356,9 @@ verifyChecksum() & Проверяет контрольную сумму при �
 
 \subsubsection{Спецификация класса VKSController}
 
-Описание: Отвечает за организацию видеоконференций между пользователями платформы. Управляет созданием комнат, генерацией ссылок на подключение, настройкой доступа, записью и завершением встреч. Обеспечивает привязку к событиям календаря и проектным задачам.
+Класс отвечает за организацию видеоконференций между пользователями платформы. Управляет созданием комнат, генерацией ссылок на подключение, настройкой доступа, записью и завершением встреч. Обеспечивает привязку к событиям календаря и проектным задачам.
 
-Зависимости:
+Класс взаимодействует со следующими классами:
 \begin{itemize}
     \item встречи связаны с пользователями через таблицу employee;
     \item каждая конференция может быть связана с событием в календаре;
@@ -337,12 +366,16 @@ verifyChecksum() & Проверяет контрольную сумму при �
     \item интеграция с NotificationService для рассылки приглашений.
 \end{itemize}
 
+Описание полей класса представлено в таблице \ref{vkscontroller:data}.
+
+Описание методов класса представлено в таблице \ref{vkscontroller:methods}.
+
 \begin{xltabular}{\textwidth}{|p{6cm}|X|}
-\caption{Данные класса VKSController\label{vkscontroller:data}} \\ \hline
-\centrow Данные & \centrow Описание \\ \hline
+\caption{Поля класса VKSController\label{vkscontroller:data}} \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endfirsthead
 \continuecaption{Продолжение таблицы \ref{vkscontroller:data}}
-\centrow Данные & \centrow Описание \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endhead
 Conference & Модель конференции (ID, тема, дата, продолжительность) \\ \hline
 Host & Ведущий (создатель конференции) \\ \hline
@@ -366,13 +399,11 @@ endConference() & Завершение встречи и выгрузка зап
 generateJoinLink() & Генерация ссылки с токеном доступа \\ \hline
 \end{xltabular}
 
-
-
 \subsubsection{Спецификация класса MediaService}
 
-Описание: Обеспечивает обработку аудио- и видеопотоков во время конференции. Управляет началом/окончанием трансляции, записью, сжатием и сохранением медиаданных. Также отвечает за качество соединения и адаптацию потока под пропускную способность.
+Класс обеспечивает обработку аудио- и видеопотоков во время конференции. Управляет началом/окончанием трансляции, записью, сжатием и сохранением медиаданных. Также отвечает за качество соединения и адаптацию потока под пропускную способность.
 
-Зависимости:
+Класс взаимодействует со следующими классами:
 \begin{itemize}
     \item работает напрямую с VKSController через WebRTC API;
     \item хранит записи в FileStorageService;
@@ -380,12 +411,16 @@ generateJoinLink() & Генерация ссылки с токеном дост�
     \item взаимодействует с нагрузочным балансировщиком при высоком трафике.
 \end{itemize}
 
+Описание полей класса представлено в таблице \ref{mediaservice:data}.
+
+Описание методов класса представлено в таблице \ref{mediaservice:methods}.
+
 \begin{xltabular}{\textwidth}{|p{6cm}|X|}
-\caption{Данные класса MediaService\label{mediaservice:data}} \\ \hline
-\centrow Данные & \centrow Описание \\ \hline
+\caption{Поля класса MediaService\label{mediaservice:data}} \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endfirsthead
 \continuecaption{Продолжение таблицы \ref{mediaservice:data}}
-\centrow Данные & \centrow Описание \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endhead
 Stream & Видеопоток, получаемый по WebRTC \\ \hline
 Bitrate & Текущая скорость передачи (kbps) \\ \hline
@@ -411,9 +446,9 @@ monitorLatency() & Отслеживание задержки в реальном
 
 \subsubsection{Спецификация класса ChatController}
 
-Описание: Управляет созданием чатов, добавлением/удалением участников, организацией каналов, групповых и приватных бесед. Поддерживает отображение истории, закрепление сообщений, а также интеграцию с проектами и контактами.
+Класс управляет созданием чатов, добавлением/удалением участников, организацией каналов, групповых и приватных бесед. Поддерживает отображение истории, закрепление сообщений, а также интеграцию с проектами и контактами.
 
-Зависимости:
+Класс взаимодействует со следующими классами:
 \begin{itemize}
     \item чаты связаны с пользователями через таблицу employee;
     \item каждое сообщение привязано к чату через message.chat\_id;
@@ -421,12 +456,16 @@ monitorLatency() & Отслеживание задержки в реальном
     \item взаимодействует с NotificationService и MessageService.
 \end{itemize}
 
+Описание полей класса представлено в таблице \ref{chatcontroller:data}.
+
+Описание методов класса представлено в таблице \ref{chatcontroller:methods}.
+
 \begin{xltabular}{\textwidth}{|p{6cm}|X|}
-\caption{Данные класса ChatController\label{chatcontroller:data}} \\ \hline
-\centrow Данные & \centrow Описание \\ \hline
+\caption{Поля класса ChatController\label{chatcontroller:data}} \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endfirsthead
 \continuecaption{Продолжение таблицы \ref{chatcontroller:data}}
-\centrow Данные & \centrow Описание \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endhead
 Chat & Модель чата (ID, название, тип) \\ \hline
 Members & Список участников чата \\ \hline
@@ -449,13 +488,11 @@ pinMessage() & Закрепление сообщения в верхней ча�
 getChatHistory() & Получение истории сообщений по chat\_id \\ \hline
 \end{xltabular}
 
-
-
 \subsubsection{Спецификация класса MessageService}
 
-Описание: Обрабатывает отправку, получение и хранение сообщений. Обеспечивает доставку push-уведомлений, шифрование, поддержку вложений, реакций и статусов доставки (прочитано/доставлено).
+Класс обрабатывает отправку, получение и хранение сообщений. Обеспечивает доставку push-уведомлений, шифрование, поддержку вложений, реакций и статусов доставки (прочитано/доставлено).
 
-Зависимости:
+Класс взаимодействует со следующими классами:
 \begin{itemize}
     \item каждое сообщение связано с пользователем (author\_id) и чатом (chat\_id);
     \item вложения реализуются через FileManager;
@@ -463,12 +500,16 @@ getChatHistory() & Получение истории сообщений по cha
     \item статусы доставки хранятся в таблице message\_status.
 \end{itemize}
 
+Описание полей класса представлено в таблице \ref{messageservice:data}.
+
+Описание методов класса представлено в таблице \ref{messageservice:methods}.
+
 \begin{xltabular}{\textwidth}{|p{6cm}|X|}
-\caption{Данные класса MessageService\label{messageservice:data}} \\ \hline
-\centrow Данные & \centrow Описание \\ \hline
+\caption{Поля класса MessageService\label{messageservice:data}} \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endfirsthead
 \continuecaption{Продолжение таблицы \ref{messageservice:data}}
-\centrow Данные & \centrow Описание \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endhead
 Message & Текст сообщения, время отправки, тип (text/image/file) \\ \hline
 Author & Отправитель сообщения (employee ID) \\ \hline
@@ -493,9 +534,9 @@ encryptMessage() & Шифрование тела сообщения перед �
 
 \subsubsection{Спецификация класса ContactController}
 
-Описание: Управляет добавлением, редактированием, удалением и группировкой контактов. Обеспечивает интеграцию с почтой, чатами и системой уведомлений. Поддерживает метки, фильтрацию, сортировку и массовый импорт из внешних источников.
+Класс управляет добавлением, редактированием, удалением и группировкой контактов. Обеспечивает интеграцию с почтой, чатами и системой уведомлений. Поддерживает метки, фильтрацию, сортировку и массовый импорт из внешних источников.
 
-Зависимости:
+Класс взаимодействует со следующими классами:
 \begin{itemize}
     \item каждый контакт принадлежит пользователю (employee);
     \item группы контактов реализованы через таблицу contact\_group;
@@ -503,12 +544,16 @@ encryptMessage() & Шифрование тела сообщения перед �
     \item доступ к контактам ограничен ролями и политиками приватности.
 \end{itemize}
 
+Описание полей класса представлено в таблице \ref{contactcontroller:data}.
+
+Описание методов класса представлено в таблице \ref{contactcontroller:methods}.
+
 \begin{xltabular}{\textwidth}{|p{6cm}|X|}
-\caption{Данные класса ContactController\label{contactcontroller:data}} \\ \hline
-\centrow Данные & \centrow Описание \\ \hline
+\caption{Поля класса ContactController\label{contactcontroller:data}} \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endfirsthead
 \continuecaption{Продолжение таблицы \ref{contactcontroller:data}}
-\centrow Данные & \centrow Описание \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endhead
 Contact & Модель контакта (имя, email, телефон, компания) \\ \hline
 Group & Группа контактов, к которой относится запись \\ \hline
@@ -531,13 +576,11 @@ groupContacts() & Группировка по категориям \\ \hline
 getContactList() & Получение списка контактов пользователя \\ \hline
 \end{xltabular}
 
-
-
 \subsubsection{Спецификация класса ContactSyncService}
 
-Описание: Обеспечивает синхронизацию контактов между локальной базой и внешними источниками: почтовыми клиентами, CRM-системами, корпоративными LDAP-серверами. Поддерживает очистку дубликатов и регулярные автообновления.
+Класс обеспечивает синхронизацию контактов между локальной базой и внешними источниками: почтовыми клиентами, CRM-системами, корпоративными LDAP-серверами. Поддерживает очистку дубликатов и регулярные автообновления.
 
-Зависимости:
+Класс взаимодействует со следующими классами:
 \begin{itemize}
     \item контакты синхронизируются с внешними источниками (Google, Outlook, LDAP);
     \item взаимодействует с ContactController и NotificationService;
@@ -545,12 +588,16 @@ getContactList() & Получение списка контактов польз
     \item поддерживает экспорт в формате vCard и CSV.
 \end{itemize}
 
+Описание полей класса представлено в таблице \ref{contactsyncservice:data}.
+
+Описание методов класса представлено в таблице \ref{contactsyncservice:methods}.
+
 \begin{xltabular}{\textwidth}{|p{6cm}|X|}
-\caption{Данные класса ContactSyncService\label{contactsyncservice:data}} \\ \hline
-\centrow Данные & \centrow Описание \\ \hline
+\caption{Поля класса ContactSyncService\label{contactsyncservice:data}} \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endfirsthead
 \continuecaption{Продолжение таблицы \ref{contactsyncservice:data}}
-\centrow Данные & \centrow Описание \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endhead
 ExternalSource & Информация об источнике данных (тип, URL) \\ \hline
 LastSync & Время последней синхронизации \\ \hline
@@ -575,9 +622,9 @@ resolveConflicts() & Обрабатывает коллизии при совпа
 
 \subsubsection{Спецификация класса SettingsController}
 
-Описание: Управляет пользовательскими настройками: профилем, паролем, темой оформления, уведомлениями и языком интерфейса. Является точкой входа для фронтенда при инициализации настроек в сессии пользователя. Также осуществляет базовую валидацию и сохранение изменений.
+Класс управляет пользовательскими настройками: профилем, паролем, темой оформления, уведомлениями и языком интерфейса. Является точкой входа для фронтенда при инициализации настроек в сессии пользователя. Также осуществляет базовую валидацию и сохранение изменений.
 
-Зависимости:
+Класс взаимодействует со следующими классами:
 \begin{itemize}
     \item данные сохраняются в PreferencesService;
     \item используется AuthService для смены пароля и получения информации о пользователе;
@@ -585,12 +632,16 @@ resolveConflicts() & Обрабатывает коллизии при совпа
     \item интеграция с интерфейсной темой (через ThemeProvider).
 \end{itemize}
 
+Описание полей класса представлено в таблице \ref{settingscontroller:data}.
+
+Описание методов класса представлено в таблице \ref{settingscontroller:methods}.
+
 \begin{xltabular}{\textwidth}{|p{6cm}|X|}
-\caption{Данные класса SettingsController\label{settingscontroller:data}} \\ \hline
-\centrow Данные & \centrow Описание \\ \hline
+\caption{Поля класса SettingsController\label{settingscontroller:data}} \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endfirsthead
 \continuecaption{Продолжение таблицы \ref{settingscontroller:data}}
-\centrow Данные & \centrow Описание \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endhead
 UserProfile & Информация о пользователе (ФИО, email, аватар) \\ \hline
 Theme & Выбранная тема (light/dark) \\ \hline
@@ -615,9 +666,9 @@ toggle2FA() & Включение или отключение двухфакто�
 
 \subsubsection{Спецификация класса PreferencesService}
 
-Описание: Обеспечивает сохранение и загрузку настроек пользователя. Хранит значения в привязанной таблице настроек в БД или в localStorage при offline-режиме. Отвечает за дефолтные параметры и восстановление настроек при сбросе.
+Класс обеспечивает сохранение и загрузку настроек пользователя. Хранит значения в привязанной таблице настроек в БД или в localStorage при offline-режиме. Отвечает за дефолтные параметры и восстановление настроек при сбросе.
 
-Зависимости:
+Класс взаимодействует со следующими классами:
 \begin{itemize}
     \item используется SettingsController как интерфейс управления;
     \item взаимодействует с AuthService для получения user\_id;
@@ -625,12 +676,16 @@ toggle2FA() & Включение или отключение двухфакто�
     \item подключается к DefaultSettingsProvider при первом входе.
 \end{itemize}
 
+Описание полей класса представлено в таблице \ref{preferencesservice:data}.
+
+Описание методов класса представлено в таблице \ref{preferencesservice:methods}.
+
 \begin{xltabular}{\textwidth}{|p{6cm}|X|}
-\caption{Данные класса PreferencesService\label{preferencesservice:data}} \\ \hline
-\centrow Данные & \centrow Описание \\ \hline
+\caption{Поля класса PreferencesService\label{preferencesservice:data}} \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endfirsthead
 \continuecaption{Продолжение таблицы \ref{preferencesservice:data}}
-\centrow Данные & \centrow Описание \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endhead
 UserId & Идентификатор пользователя (внешний ключ) \\ \hline
 Key & Название параметра (например, theme) \\ \hline
@@ -655,9 +710,9 @@ mergeSettings() & Объединяет локальные и серверные 
 
 \subsubsection{Спецификация класса DashboardController}
 
-Описание: Отвечает за отображение пользовательской панели, управление расположением и конфигурацией виджетов. Позволяет добавлять, удалять и перетаскивать виджеты, обновлять данные в реальном времени. Также обеспечивает сохранение пользовательского расположения и адаптацию под устройства.
+Класс отвечает за отображение пользовательской панели, управление расположением и конфигурацией виджетов. Позволяет добавлять, удалять и перетаскивать виджеты, обновлять данные в реальном времени. Также обеспечивает сохранение пользовательского расположения и адаптацию под устройства.
 
-Зависимости:
+Класс взаимодействует со следующими классами:
 \begin{itemize}
     \item виджеты связаны с пользователями через таблицу dashboard\_layout;
     \item получает данные с других сервисов: TaskTrackingService, FileManager и др.;
@@ -665,12 +720,16 @@ mergeSettings() & Объединяет локальные и серверные 
     \item взаимодействует с PreferencesService для сохранения расположения.
 \end{itemize}
 
+Описание полей класса представлено в таблице \ref{dashboardcontroller:data}.
+
+Описание методов класса представлено в таблице \ref{dashboardcontroller:methods}.
+
 \begin{xltabular}{\textwidth}{|p{6cm}|X|}
-\caption{Данные класса DashboardController\label{dashboardcontroller:data}} \\ \hline
-\centrow Данные & \centrow Описание \\ \hline
+\caption{Поля класса DashboardController\label{dashboardcontroller:data}} \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endfirsthead
 \continuecaption{Продолжение таблицы \ref{dashboardcontroller:data}}
-\centrow Данные & \centrow Описание \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endhead
 UserLayout & Массив с позицией и конфигурацией виджетов \\ \hline
 AvailableWidgets & Список всех доступных виджетов платформы \\ \hline
@@ -695,9 +754,9 @@ refreshData() & Принудительное обновление содержи
 
 \subsubsection{Спецификация класса WidgetService}
 
-Описание: Обрабатывает генерацию, конфигурацию и рендеринг виджетов на панели. Отвечает за запрос и кэширование данных, отображение графиков, таблиц, уведомлений и прочих блоков. Позволяет адаптировать содержимое под роль пользователя.
+Класс обрабатывает генерацию, конфигурацию и рендеринг виджетов на панели. Отвечает за запрос и кэширование данных, отображение графиков, таблиц, уведомлений и прочих блоков. Позволяет адаптировать содержимое под роль пользователя.
 
-Зависимости:
+Класс взаимодействует со следующими классами:
 \begin{itemize}
     \item данные поступают от сторонних сервисов: TaskTrackingService, FileManager и т.д.;
     \item виджеты отображаются через DashboardController;
@@ -705,12 +764,16 @@ refreshData() & Принудительное обновление содержи
     \item взаимодействует с ChartRenderer, TableComponent, HTMLWidget.
 \end{itemize}
 
+Описание полей класса представлено в таблице \ref{widgetservice:data}.
+
+Описание методов класса представлено в таблице \ref{widgetservice:methods}.
+
 \begin{xltabular}{\textwidth}{|p{6cm}|X|}
-\caption{Данные класса WidgetService\label{widgetservice:data}} \\ \hline
-\centrow Данные & \centrow Описание \\ \hline
+\caption{Поля класса WidgetService\label{widgetservice:data}} \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endfirsthead
 \continuecaption{Продолжение таблицы \ref{widgetservice:data}}
-\centrow Данные & \centrow Описание \\ \hline
+\centrow Поле & \centrow Описание \\ \hline
 \endhead
 Widget & Модель виджета (тип, параметры, источник данных) \\ \hline
 Config & Конфигурация отображения (цвет, размер, тип графика) \\ \hline
@@ -735,23 +798,20 @@ cacheData() & Сохраняет последние данные в кэше \\ 
 
 \subsection{Тестирование программной системы}
 
-\subsubsection{Модульное тестирование классов и методов программы}
-
-Модульное тестирование в рамках разработки веб-платформы проводится с целью проверки корректной работы каждого отдельного класса и метода системы. Оно позволяет локализовать и устранить ошибки ещё на ранней стадии, обеспечивая надёжность и предсказуемое поведение компонентов при различных сценариях использования.
-
-Описание процесса модульного тестирования:
+Тестирование веб-платформы проведено методом модульного тестирования. Модульное тестирование в рамках разработки веб-платформы проводится с целью проверки корректной работы каждого отдельного класса и метода системы. Оно позволяет локализовать и устранить ошибки ещё на ранней стадии, обеспечивая надёжность и предсказуемое поведение компонентов при различных сценариях использования.
 
 Модульные тесты разрабатываются для всех основных бизнес-классов, отвечающих за управление почтой, контактами, задачами, видеоконференциями, файлами, настройками и панелью управления. Для тестирования используется автоматизированный фреймворк (например, Jest для компонентов на TypeScript или pytest для Python-частей), позволяющий запускать тесты изолированно и проверять возвращаемые значения, обработку ошибок, работу с внешними сервисами и корректность изменений состояния.
 
 Цели модульного тестирования:
-\begin{enumerate}
-    \item Изоляция — каждый тест проверяет только один метод или функциональный блок.
-    \item Автоматизация — тесты можно запускать непрерывно (CI), без вмешательства пользователя.
-    \item Покрытие — тестируются все ключевые методы, включая граничные случаи и обработку исключений.
-\end{enumerate}
+\begin{itemize}
+    \item изоляция — каждый тест проверяет только один метод или функциональный блок;
+    \item автоматизация — тесты можно запускать непрерывно (CI), без вмешательства пользователя;
+    \item покрытие — тестируются все ключевые методы, включая граничные случаи и обработку исключений.
+\end{itemize}
 
 \newpage
-Тестирование MailMessageController:
+
+Тесты для модуля MailMessageController приведены на рисунке \ref{templ:test1}.
 
 \begin{figure}[H]
 \begin{lstlisting}[language=JavaScript]
@@ -791,10 +851,11 @@ describe('MailMessageController', () => {
 });
 \end{lstlisting}
 \captionof{figure}{Тесты TaskScheduler}
+\label{templ:test1}
 \end{figure}
 
 \newpage
-Тестирование MailMessageController:
+Тесты для модуля MailMessageController приведены на рисунке \ref{templ:test2}.
 
 \begin{figure}[H]
 \begin{lstlisting}[language=Python]
@@ -830,11 +891,12 @@ def test_send_mail_no_recipients(mail_controller):
     assert "recipients" in str(exc_info.value)
 \end{lstlisting}
 \captionof{figure}{Тесты MailMessageController}
+\label{templ:test2}
 \end{figure}
 
 
 \newpage
-Тестирование ContactManager:
+Тесты для модуля ContactManager приведены на рисунке \ref{templ:test3}.
 
 \begin{figure}[H]
 \begin{lstlisting}[language=JavaScript]
@@ -861,10 +923,11 @@ describe('ContactManager', () => {
 });
 \end{lstlisting}
 \captionof{figure}{Тесты ContactManager}
+\label{templ:test3}
 \end{figure}
 
 \newpage
-Тестирование TaskScheduler:
+Тесты для модуля TaskScheduler приведены на рисунке \ref{templ:test4}.
 
 \begin{figure}[H]
 \begin{lstlisting}[language=JavaScript]
@@ -899,10 +962,11 @@ describe('TaskScheduler', () => {
 });
 \end{lstlisting}
 \captionof{figure}{Тесты TaskScheduler}
+\label{templ:test4}
 \end{figure}
 
 \newpage
-Тестирование VideoConferenceManager:
+Тесты для модуля VideoConferenceManager приведены на рисунке \ref{templ:test5}.
 
 \begin{figure}[H]
 \begin{lstlisting}[language=Python]
@@ -924,10 +988,11 @@ def test_end_meeting(vc_manager):
     assert not vc_manager.is_active(meeting_id)
 \end{lstlisting}
 \captionof{figure}{Тесты VideoConferenceManager}
+\label{templ:test5}
 \end{figure}
 
 \newpage
-Тестирование FileStorageController:
+Тесты для модуля FileStorageController приведены на рисунке \ref{templ:test6}.
 
 \begin{figure}[H]
 \begin{lstlisting}[language=Python]
@@ -948,6 +1013,7 @@ def test_delete_file(storage_controller):
     assert not storage_controller.exists(file_id)
 \end{lstlisting}
 \captionof{figure}{Тесты FileStorageController}
+\label{templ:test6}
 \end{figure}
 
 Результаты тестирования
