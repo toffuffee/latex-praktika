@@ -797,229 +797,154 @@ cacheData() & Сохраняет последние данные в кэше \\ 
 
 \subsection{Тестирование программной системы}
 
-Тестирование веб-платформы проведено методом модульного тестирования. Модульное тестирование в рамках разработки веб-платформы проводится с целью проверки корректной работы каждого отдельного класса и метода системы. Оно позволяет локализовать и устранить ошибки ещё на ранней стадии, обеспечивая надёжность и предсказуемое поведение компонентов при различных сценариях использования.
+Тестирование веб-платформы проведено методом модульного тестирования. Для каждого ключевого модуля системы разработаны тестовые наборы, проверяющие основные сценарии работы. Результаты представлены в виде таблиц с описанием тестовых случаев.
 
-Модульные тесты разрабатываются для всех основных бизнес-классов, отвечающих за управление почтой, контактами, задачами, видеоконференциями, файлами, настройками и панелью управления. Для тестирования используется автоматизированный фреймворк (например, Jest для компонентов на TypeScript или pytest для Python-частей), позволяющий запускать тесты изолированно и проверять возвращаемые значения, обработку ошибок, работу с внешними сервисами и корректность изменений состояния.
+\subsubsection{Модуль MailMessageController}
 
-Цели модульного тестирования:
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Тестовые наборы для модуля MailMessageController\label{mail:tests}} \\ \hline
+\centrow Тестовый сценарий & \centrow Ожидаемый результат \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{mail:tests}}
+\centrow Тестовый сценарий & \centrow Ожидаемый результат \\ \hline
+\endhead
+Отправка письма с корректными данными (тема, тело, получатели) &
+Статус success и сгенерированный messageId в ответе \\ \hline
+Попытка отправки письма без указания получателей &
+Исключение с сообщением "Поле 'recipients' обязательно" \\ \hline
+\end{xltabular}
+
+\newpage
+\subsubsection{Модуль ContactManager}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Тестовые наборы для модуля ContactManager\label{contact:tests}} \\ \hline
+\centrow Тестовый сценарий & \centrow Ожидаемый результат \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{contact:tests}}
+\centrow Тестовый сценарий & \centrow Ожидаемый результат \\ \hline
+\endhead
+Добавление нового контакта с указанием ID и имени &
+Контакт доступен для поиска по указанному ID \\ \hline
+Удаление существующего контакта по ID &
+Контакт больше не доступен в системе \\ \hline
+\end{xltabular}
+
+\subsubsection{Модуль TaskScheduler}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Тестовые наборы для модуля TaskScheduler\label{task:tests}} \\ \hline
+\centrow Тестовый сценарий & \centrow Ожидаемый результат \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{task:tests}}
+\centrow Тестовый сценарий & \centrow Ожидаемый результат \\ \hline
+\endhead
+Планирование выполнения задачи с указанием callback и таймаута &
+Callback-функция выполняется после указанного интервала \\ \hline
+Отмена запланированной задачи до ее выполнения &
+Callback-функция не выполняется \\ \hline
+\end{xltabular}
+
+\subsubsection{Модуль VideoConferenceManager}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Тестовые наборы для модуля VideoConferenceManager\label{video:tests}} \\ \hline
+\centrow Тестовый сценарий & \centrow Ожидаемый результат \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{video:tests}}
+\centrow Тестовый сценарий & \centrow Ожидаемый результат \\ \hline
+\endhead
+Создание конференции с указанием списка участников &
+Возвращается ID активной конференции \\ \hline
+Завершение активной конференции по ID &
+Конференция помечается как неактивная \\ \hline
+\end{xltabular}
+
+\subsubsection{Модуль FileStorageController}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Тестовые наборы для модуля FileStorageController\label{file:tests}} \\ \hline
+\centrow Тестовый сценарий & \centrow Ожидаемый результат \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{file:tests}}
+\centrow Тестовый сценарий & \centrow Ожидаемый результат \\ \hline
+\endhead
+Сохранение файла с указанием содержимого и имени &
+Возвращается ID сохраненного файла \\ \hline
+Удаление существующего файла по ID &
+Файл больше не доступен в системе \\ \hline
+\end{xltabular}
+
+\subsubsection{Модуль SettingsManager}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Тестовые наборы для модуля SettingsManager\label{settings:tests}} \\ \hline
+\centrow Тестовый сценарий & \centrow Ожидаемый результат \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{settings:tests}}
+\centrow Тестовый сценарий & \centrow Ожидаемый результат \\ \hline
+\endhead
+Смена цветовой темы на "Тёмную" &
+Интерфейс переключается на тёмную цветовую схему, настройка сохраняется \\ \hline
+Смена цветовой темы на "Светлую" &
+Интерфейс переключается на светлую цветовую схему, настройка сохраняется \\ \hline
+Попытка установки несуществующей темы &
+Исключение с сообщением "Недопустимая цветовая тема" \\ \hline
+Сброс настроек к значениям по умолчанию &
+Все настройки восстанавливаются до заводских значений \\ \hline
+\end{xltabular}
+
+\subsubsection{Модуль CalendarService}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Тестовые наборы для модуля CalendarService\label{calendar:tests}} \\ \hline
+\centrow Тестовый сценарий & \centrow Ожидаемый результат \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{calendar:tests}}
+\centrow Тестовый сценарий & \centrow Ожидаемый результат \\ \hline
+\endhead
+Создание события с указанием названия, даты и времени &
+Событие появляется в календаре с правильными атрибутами \\ \hline
+Попытка создания события с пустым названием &
+Исключение с сообщением "Название события обязательно" \\ \hline
+Изменение времени существующего события &
+Событие перемещается на новый указанный временной интервал \\ \hline
+Удаление события по ID &
+Событие исчезает из календаря \\ \hline
+Экспорт событий за период в формате iCalendar &
+Формируется корректный .ics файл с указанными событиями \\ \hline
+Импорт событий из файла iCalendar &
+Все события из файла добавляются в календарь \\ \hline
+Настройка уведомлений о событии (за 15 минут) &
+Пользователь получает уведомление за 15 минут до начала \\ \hline
+\end{xltabular}
+
+\subsubsection{Модуль MessengerService}
+
+\begin{xltabular}{\textwidth}{|p{6cm}|X|}
+\caption{Тестовые наборы для модуля MessengerService\label{messenger:tests}} \\ \hline
+\centrow Тестовый сценарий & \centrow Ожидаемый результат \\ \hline
+\endfirsthead
+\continuecaption{Продолжение таблицы \ref{messenger:tests}}
+\centrow Тестовый сценарий & \centrow Ожидаемый результат \\ \hline
+\endhead
+Отправка текстового сообщения в существующий чат & Сообщение отображается у всех участников чата, статус "доставлено" \\ \hline
+Попытка отправки сообщения в несуществующий чат & Исключение с сообщением "Чат не найден" \\ \hline
+Создание группового чата с несколькими участниками & Новый чат появляется в списке, все участники получают уведомление \\ \hline
+Отправка файла через мессенджер (до 100 МБ) & Файл загружается, появляется в чате как вложение \\ \hline
+Попытка отправки файла больше 100 МБ & Исключение с сообщением "Превышен максимальный размер файла" \\ \hline
+Пометка сообщения как "прочитано" & Статус сообщения меняется на "прочитано", отображается время прочтения \\ \hline
+Удаление сообщения для всех участников & Сообщение исчезает из чата у всех пользователей \\ \hline
+Редактирование отправленного сообщения & В чате отображается изменённая версия с пометкой "редактировано" \\ \hline
+Поиск по истории сообщений & Возвращается список сообщений, содержащих искомую фразу \\ \hline
+Получение уведомления о новом сообщении & В интерфейсе появляется всплывающее уведомление с текстом сообщения \\ \hline
+\end{xltabular}
+
+\subsubsection{Результаты тестирования}
+
+Все тестовые сценарии успешно пройдены, что подтверждает корректную работу системы:
 \begin{itemize}
-    \item изоляция — каждый тест проверяет только один метод или функциональный блок;
-    \item автоматизация — тесты можно запускать непрерывно (CI), без вмешательства пользователя;
-    \item покрытие — тестируются все ключевые методы, включая граничные случаи и обработку исключений.
-\end{itemize}
-
-\newpage
-
-Тесты для модуля MailMessageController приведены на рисунке \ref{templ:test1}.
-
-\begin{figure}[H]
-\begin{lstlisting}[language=JavaScript]
-import { MailMessageController } from '../controllers/MailMessageController';
-import { mockJMAPService } from '../mocks/jmapService';
-import { mockStorage } from '../mocks/storage';
-
-describe('MailMessageController', () => {
-  let controller;
-
-  beforeEach(() => {
-    controller = new MailMessageController(mockJMAPService, mockStorage);
-  });
-
-  it('успешно отправляет письмо с корректными данными', async () => {
-    const result = await controller.sendMail({
-      subject: 'Тестовое письмо',
-      body: 'Содержимое письма',
-      recipients: ['test@example.com'],
-      attachments: [],
-    });
-
-    expect(result.status).toBe('success');
-    expect(result.messageId).toBeDefined();
-  });
-
-  it('выдаёт ошибку при отсутствии получателя', async () => {
-    await expect(
-      controller.sendMail({
-        subject: 'Без получателя',
-        body: 'Текст',
-        recipients: [],
-        attachments: [],
-      })
-    ).rejects.toThrow('Поле "recipients" обязательно');
-  });
-});
-\end{lstlisting}
-\captionof{figure}{Тесты TaskScheduler}
-\label{templ:test1}
-\end{figure}
-
-\newpage
-Тесты для модуля MailMessageController приведены на рисунке \ref{templ:test2}.
-
-\begin{figure}[H]
-\begin{lstlisting}[language=Python]
-import pytest
-from myapp.controllers import MailMessageController
-from unittest.mock import Mock
-
-@pytest.fixture
-def mail_controller():
-    mock_jmap_service = Mock()
-    mock_storage = Mock()
-    return MailMessageController(mock_jmap_service, mock_storage)
-
-def test_send_mail_success(mail_controller):
-    mail_controller.jmap_service.send.return_value = "msg123"
-    result = mail_controller.send_mail(
-        subject="Тестовое письмо",
-        body="Содержимое письма",
-        recipients=["test@example.com"],
-        attachments=[]
-    )
-    assert result['status'] == 'success'
-    assert 'message_id' in result
-
-def test_send_mail_no_recipients(mail_controller):
-    with pytest.raises(ValueError) as exc_info:
-        mail_controller.send_mail(
-            subject="Без получателя",
-            body="Текст",
-            recipients=[],
-            attachments=[]
-        )
-    assert "recipients" in str(exc_info.value)
-\end{lstlisting}
-\captionof{figure}{Тесты MailMessageController}
-\label{templ:test2}
-\end{figure}
-
-
-\newpage
-Тесты для модуля ContactManager приведены на рисунке \ref{templ:test3}.
-
-\begin{figure}[H]
-\begin{lstlisting}[language=JavaScript]
-import { ContactManager } from '../controllers/ContactManager';
-
-describe('ContactManager', () => {
-  let manager;
-
-  beforeEach(() => {
-    manager = new ContactManager();
-  });
-
-  it('добавляет новый контакт', () => {
-    const contact = { id: '1', name: 'Иван' };
-    manager.addContact(contact);
-    expect(manager.getContactById('1')).toEqual(contact);
-  });
-
-  it('удаляет контакт', () => {
-    manager.addContact({ id: '2', name: 'Мария' });
-    manager.removeContact('2');
-    expect(manager.getContactById('2')).toBeUndefined();
-  });
-});
-\end{lstlisting}
-\captionof{figure}{Тесты ContactManager}
-\label{templ:test3}
-\end{figure}
-
-\newpage
-Тесты для модуля TaskScheduler приведены на рисунке \ref{templ:test4}.
-
-\begin{figure}[H]
-\begin{lstlisting}[language=JavaScript]
-import { TaskScheduler } from '../controllers/TaskScheduler';
-
-describe('TaskScheduler', () => {
-  let scheduler;
-
-  beforeEach(() => {
-    scheduler = new TaskScheduler();
-    jest.useFakeTimers();
-  });
-
-  afterEach(() => {
-    jest.useRealTimers();
-  });
-
-  it('запускает задачу по расписанию', () => {
-    const mockTask = jest.fn();
-    scheduler.schedule('task1', mockTask, 1000);
-    jest.advanceTimersByTime(1000);
-    expect(mockTask).toHaveBeenCalled();
-  });
-
-  it('отменяет задачу', () => {
-    const mockTask = jest.fn();
-    scheduler.schedule('task2', mockTask, 1000);
-    scheduler.cancel('task2');
-    jest.advanceTimersByTime(1000);
-    expect(mockTask).not.toHaveBeenCalled();
-  });
-});
-\end{lstlisting}
-\captionof{figure}{Тесты TaskScheduler}
-\label{templ:test4}
-\end{figure}
-
-\newpage
-Тесты для модуля VideoConferenceManager приведены на рисунке \ref{templ:test5}.
-
-\begin{figure}[H]
-\begin{lstlisting}[language=Python]
-import pytest
-from myapp.controllers import VideoConferenceManager
-
-@pytest.fixture
-def vc_manager():
-    return VideoConferenceManager()
-
-def test_start_meeting(vc_manager):
-    meeting_id = vc_manager.start_meeting(['user1', 'user2'])
-    assert isinstance(meeting_id, str)
-    assert vc_manager.is_active(meeting_id)
-
-def test_end_meeting(vc_manager):
-    meeting_id = vc_manager.start_meeting(['user1'])
-    vc_manager.end_meeting(meeting_id)
-    assert not vc_manager.is_active(meeting_id)
-\end{lstlisting}
-\captionof{figure}{Тесты VideoConferenceManager}
-\label{templ:test5}
-\end{figure}
-
-\newpage
-Тесты для модуля FileStorageController приведены на рисунке \ref{templ:test6}.
-
-\begin{figure}[H]
-\begin{lstlisting}[language=Python]
-import pytest
-from myapp.controllers import FileStorageController
-
-@pytest.fixture
-def storage_controller():
-    return FileStorageController()
-
-def test_save_file(storage_controller):
-    file_id = storage_controller.save_file(b'content', 'file.txt')
-    assert file_id is not None
-
-def test_delete_file(storage_controller):
-    file_id = storage_controller.save_file(b'content', 'file.txt')
-    storage_controller.delete_file(file_id)
-    assert not storage_controller.exists(file_id)
-\end{lstlisting}
-\captionof{figure}{Тесты FileStorageController}
-\label{templ:test6}
-\end{figure}
-
-Результаты тестирования
-
-Все представленные тесты успешно проверяют поведение ключевых компонентов приложения. Использование Jest и Pytest обеспечивает:
-\begin{itemize}
-  \item контроль корректности бизнес-логики;
-  \item отлавливание ошибок при неверных входных данных;
-  \item поддержку модульного и интеграционного тестирования.
+\item покрытие основных use-case каждого модуля;
+\item отработка граничных условий и исключительных ситуаций;
+\item соответствие спецификациям и требованиям.
 \end{itemize}
